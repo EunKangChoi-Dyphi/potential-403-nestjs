@@ -7,10 +7,50 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
+version: '3.5'
+
 services:
+  # 1. RDBMS database
+  dev-mysql:
+    image: mysql:8.0
+    container_name: potential-403-dev-db
+    restart: always
+    ports:
+      - ${DB_PORT}:3306
+    environment:
+      MYSQL_HOST: localhost
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      TZ: Asia/Seoul
+  # # (TBD) prod-mysql:
+  # image: mysql:8.0
+  # container_name: potential-403-prod-db
+  # restart: always
+  # ports:
+  #   - ${DB_PORT}:3306
+  # environment:
+  #   MYSQL_HOST: localhost
+  #   MYSQL_DATABASE: ${DB_NAME}
+  #   MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+  #   TZ: Asia/Seoul
+  # 2. redis
+  dev-redis:
+    image: redis:latest
+    container_name: potential-403-dev-cache
+    ports:
+      - ${REDIS_PORT}
+  # # (TBD) production-redis:
+  # prod-redis:
+  #   image: redis:latest
+  #   container_name: potential-403-prod-cache
+  #   ports:
+  #     - ${REDIS_PORT}
+
   server:
     build:
       context: .
+      dockerfile: Dockerfile
+    container_name: potential-403-server-production
     environment:
       NODE_ENV: production
     ports:
