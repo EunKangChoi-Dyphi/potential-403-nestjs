@@ -10,7 +10,7 @@
 version: '3.5'
 
 services:
-  # 1. RDBMS database
+  # 1. development
   dev-mysql:
     image: mysql:8.0
     container_name: potential-403-dev-db
@@ -22,6 +22,12 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       TZ: Asia/Seoul
+  dev-redis:
+    image: redis:latest
+    container_name: potential-403-dev-cache
+    ports:
+      - ${REDIS_PORT}
+  # 2. production
   # # (TBD) prod-mysql:
   # image: mysql:8.0
   # container_name: potential-403-prod-db
@@ -33,12 +39,6 @@ services:
   #   MYSQL_DATABASE: ${DB_NAME}
   #   MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
   #   TZ: Asia/Seoul
-  # 2. redis
-  dev-redis:
-    image: redis:latest
-    container_name: potential-403-dev-cache
-    ports:
-      - ${REDIS_PORT}
   # # (TBD) production-redis:
   # prod-redis:
   #   image: redis:latest
