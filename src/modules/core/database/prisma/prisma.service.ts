@@ -4,10 +4,13 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit {
+export class PrismaService
+  extends PrismaClient<Prisma.PrismaClientOptions, 'query' | 'error'>
+  implements OnModuleInit
+{
   private readonly logger = new Logger(PrismaService.name);
   constructor() {
     super({
@@ -28,7 +31,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 
   async enableShutdownHooks(app: INestApplication) {
-    this.$on('before Exit', async () => {
+    this.$on('error', async () => {
       await app.close();
     });
   }
