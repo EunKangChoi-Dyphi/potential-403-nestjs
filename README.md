@@ -10,6 +10,12 @@ $ npm install
 $ npx prisma
 ```
 
+- prisma.schema 에 정의된 테이블모델을 물리 데이터베이스(mysql)에 적용시키기
+
+```bash
+$ npx prisma migrate dev --name init
+```
+
 ## Running the app
 
 ```bash
