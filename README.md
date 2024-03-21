@@ -22,6 +22,13 @@ $ npx prisma
 $ npx prisma migrate dev --name init
 ```
 
+- Prisma client 생성
+  - Prisma 공식자료: [Generating Prisma Client](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/generating-prisma-client)
+
+```bash
+$ npx prisma generate
+```
+
 ## Running the app
 
 ```bash
