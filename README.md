@@ -6,6 +6,12 @@ $ npm install
 
 ## prisma setting
 
+- docker-compose에 기재한 mysql, redis 환경 셋팅 (단, Docker 앱 접속먼저 하고 밑의 명령어를 해주세요.)
+
+```bash
+$ docker-compose up -d
+```
+
 ```bash
 $ npx prisma
 ```
