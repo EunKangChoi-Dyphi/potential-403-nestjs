@@ -4,6 +4,7 @@ const DATABASE = {
 } as const;
 
 const REDIS = {
+  REDIS_HOST: 'REDIS_HOST',
   REDIS_PORT: 'REDIS_PORT',
 } as const;
 
