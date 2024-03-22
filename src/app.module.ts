@@ -8,11 +8,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MainModules } from 'src/modules';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE, RouterModule } from '@nestjs/core';
 import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
-  imports: [...MainModules],
+  imports: [
+    ...MainModules,
+    RouterModule.register([{ path: '/api/users', module: UsersModule }]),
+  ],
   controllers: [AppController],
   providers: [
     AppService,

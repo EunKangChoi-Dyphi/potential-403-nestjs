@@ -1,4 +1,3 @@
-import { RouterModule } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { UsersService } from './services/users.service';
 import { UsersController } from './controllers/users.controller';
@@ -9,7 +8,7 @@ import { UsersRepository } from './repositories/users.interface';
 import { UsersRepositoryImpl } from './repositories/users.repository';
 
 @Module({
-  imports: [PrismaModule, RouterModule.register([{ path: 'api/users' }])],
+  imports: [PrismaModule],
   providers: [
     UsersService,
     UserProfileService,
