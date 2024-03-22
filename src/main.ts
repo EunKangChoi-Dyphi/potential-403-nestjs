@@ -4,6 +4,8 @@ import { CustomConfigService } from './modules/core/config/custom-config.service
 import ENV_KEY from './modules/core/config/constants/env-config.constant';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PrismaService } from './modules/core/database/prisma/prisma.service';
+import CORS_OPTIONS from 'src/modules/core/config/constants/cors-option.constant';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +23,12 @@ async function bootstrap() {
   // Pipes
   // Interceptors
   // Filters
+
+  // helmet
+  app.use(helmet());
+
+  // CORS
+  app.enableCors(CORS_OPTIONS);
 
   // swagger
   const swaggerConfig = new DocumentBuilder()
