@@ -33,6 +33,7 @@ export class AwsS3Service {
   }
 
   async uploadImageToS3Bucket(dto: putObjectCommandDto) {
+    // 이미지 1개 업로드
     const putObjectCommand = new PutObjectCommand({
       Bucket: this.AWS_S3_BUCKET_NAME,
       ...dto,
