@@ -17,12 +17,20 @@ const OAUTH_SOCIALS = {
   // APPLE_SECRET_KEY : 'APPLE_SECRET_KEY',
 } as const;
 
+const AWS = {
+  AWS_REGION: 'AWS_REGION',
+  AWS_ACCESS_KEY: 'AWS_ACCESS_KEY',
+  AWS_SECRET_ACCESS_KEY: 'AWS_SECRET_ACCESS_KEY',
+  AWS_S3_BUCKET_NAME: 'AWS_S3_BUCKET_NAME',
+} as const;
+
 const ENV_KEY = {
   SERVER_PORT: 'SERVER_PORT',
   NODE_ENV: 'NODE_ENV',
   ...DATABASE,
   ...REDIS,
   ...OAUTH_SOCIALS,
+  ...AWS,
 } as const;
 
 export default ENV_KEY;
