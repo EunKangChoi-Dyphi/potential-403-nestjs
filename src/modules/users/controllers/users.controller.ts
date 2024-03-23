@@ -15,16 +15,19 @@ import { UpdateUserRequestBodyDto } from '../dtos/req/create-user-request-body.d
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  // 회원가입 (일반)
   @Post()
   async createUser(@Body() body: CreateUserDto) {
     return await this.usersService.createUser(body);
   }
 
+  // 회원정보 조회
   @Get(':id')
   async getOneUser(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.getOneUser(id);
   }
 
+  // 회원정보 수정
   @Patch(':id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -34,8 +37,15 @@ export class UsersController {
     return await this.usersService.updateUser({ id: id, name: name });
   }
 
+  // 회원탈퇴
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.deleteUser(id);
   }
+
+  // 소셜로그인 - 카카오
+  @Post('login/kakao')
+  async socialLoginKakao() {}
+  // 소셜로그인 - 구글
+  // 소셜로그인 - 애플
 }
