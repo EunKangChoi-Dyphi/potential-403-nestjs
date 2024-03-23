@@ -1,0 +1,7 @@
+branchName: 'issue-${issue.number}'
+defaultBranch: 'master'
+branches:
+  - label: '*'
+    prefix: feature/
+autoCloseIssue: true
+commentMessage: '이슈브랜치 ${branchName} 생성완료했습니다!'
