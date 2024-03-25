@@ -58,11 +58,10 @@ export class UsersController {
   }
 
   // 소셜로그인겸 & 회원가입
-  // 소셜로그인 - 카카오
-  // 소셜로그인 - 구글
-  // 소셜로그인 - 애플
   @Post('sign-in')
   async signInOrSignUp(@Body() body: SignInOrSignUpRequestBodyDto) {
     const account = await this.authService.validateExternalAccessToken(body);
+
+    // const member =
   }
 }
