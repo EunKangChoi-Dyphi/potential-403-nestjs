@@ -20,6 +20,7 @@ import {
     HttpModule,
     CustomConfigModule,
     JwtModule.registerAsync({
+      inject: [CustomConfigService],
       useFactory: (customConfigService: CustomConfigService) => {
         return {
           secret: customConfigService.get<string>(ENV_KEY.JWT_SECRET_KEY),

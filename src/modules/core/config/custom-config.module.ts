@@ -14,6 +14,8 @@ import Joi from 'joi';
         DATABASE_URL: Joi.string().required(),
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
+        JWT_SECRET_KEY: Joi.string().required(),
+        JWT_ACCESS_TOKEN_EXPIRATION: Joi.string().required(),
       }),
     }),
   ],

@@ -14,16 +14,21 @@ import { UpdateUserRequestBodyDto } from '../dtos/req/create-user-request-body.d
 import { SignInUser } from 'src/decorators/sign-in-user.decorator';
 import { UserEntity } from '../entities/user.entity';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { SignInOrSignUpRequestBodyDto } from 'src/modules/users/dtos/req/sign-in-sign-up-request-body.dto';
+import { AuthService } from 'src/modules/core/auth/services/auth.service';
 
 @Controller()
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   // 로그인한 회원정보 조회
   @UseGuards(JwtAuthGuard)
   @Get()
   async getOneUser(
-    @Param('id', ParseIntPipe) id: number,
+    // @Param('id', ParseIntPipe) id: number,
     @SignInUser() user: UserEntity, // login required
   ) {
     return await this.usersService.getOneUser(user.id);
@@ -57,10 +62,7 @@ export class UsersController {
   // 소셜로그인 - 구글
   // 소셜로그인 - 애플
   @Post('sign-in')
-  async signInWithSocialOauth() {
-    try {
-    } catch (error) {
-      throw error;
-    }
+  async signInOrSignUp(@Body() body: SignInOrSignUpRequestBodyDto) {
+    const account = await this.authService.validateExternalAccessToken(body);
   }
 }
