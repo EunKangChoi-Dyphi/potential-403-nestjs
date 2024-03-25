@@ -9,7 +9,12 @@ export class RedisService {
   async get(key: string) {
     return await this.cacheManager.get(key);
   }
-  async set<T>(key: string, value: T, ttl: number = 60 * 60) {
-    await this.cacheManager.set(key, value, ttl);
+
+  // ttl 값 단위는 초(s)단위
+  // 예를들어 1분 => 60s
+  async set<T>(key: string, value: T, ttl?: number) {
+    // set(key, value, {ttl: 5 }) =>  ttl: 5s
+    // set(key, value, 5) => ttl: 5ms
+    await this.cacheManager.set(key, value, { ttl: ttl ?? 1000 } as any);
   }
 }
