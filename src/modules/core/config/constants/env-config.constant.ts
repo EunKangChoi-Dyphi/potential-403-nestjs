@@ -24,6 +24,11 @@ const AWS = {
   AWS_S3_BUCKET_NAME: 'AWS_S3_BUCKET_NAME',
 } as const;
 
+const JWT = {
+  JWT_SECRET_KEY: 'JWT_SECRET_KEY',
+  JWT_ACCESS_TOKEN_EXPIRATION: 'JWT_ACCESS_TOKEN_EXPIRATION',
+} as const;
+
 const ENV_KEY = {
   SERVER_PORT: 'SERVER_PORT',
   NODE_ENV: 'NODE_ENV',
@@ -31,6 +36,7 @@ const ENV_KEY = {
   ...REDIS,
   ...OAUTH_SOCIALS,
   ...AWS,
+  ...JWT,
 } as const;
 
 export default ENV_KEY;

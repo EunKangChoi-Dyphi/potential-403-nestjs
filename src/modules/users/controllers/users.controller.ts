@@ -7,18 +7,20 @@ import {
   Delete,
   Param,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
-import { CreateUserDto } from '../dtos/req/create-user.dto';
 import { UpdateUserRequestBodyDto } from '../dtos/req/create-user-request-body.dto';
 import { SignInUser } from 'src/decorators/sign-in-user.decorator';
 import { UserEntity } from '../entities/user.entity';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   // 로그인한 회원정보 조회
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getOneUser(
     @Param('id', ParseIntPipe) id: number,
@@ -28,19 +30,26 @@ export class UsersController {
   }
 
   // 회원정보 수정
-  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @Patch()
   async updateUser(
-    @Param('id', ParseIntPipe) id: number,
+    // @Param('id', ParseIntPipe) id: number,
+    @SignInUser() user: UserEntity,
     @Body() body: UpdateUserRequestBodyDto,
   ) {
     const { name } = body;
-    return await this.usersService.updateUser({ id: id, name: name });
+    return await this.usersService.updateUser({ id: user.id, name: name });
   }
 
   // 회원탈퇴
-  @Delete(':id')
-  async withdrawUser(@Param('id', ParseIntPipe) id: number) {
-    return await this.usersService.deleteUser(id);
+  @UseGuards(JwtAuthGuard)
+  @Delete()
+  async withdrawUser(
+    @SignInUser() user: UserEntity,
+    // @Param('id', ParseIntPipe) id: number,
+  ) {
+    // 탈퇴처리된 유저는 DB에 해당 데이터로우 삭제
+    return await this.usersService.deleteUser(user.id);
   }
 
   // 소셜로그인겸 & 회원가입
@@ -48,5 +57,10 @@ export class UsersController {
   // 소셜로그인 - 구글
   // 소셜로그인 - 애플
   @Post('sign-in')
-  async signInWithSocialOauth() {}
+  async signInWithSocialOauth() {
+    try {
+    } catch (error) {
+      throw error;
+    }
+  }
 }
