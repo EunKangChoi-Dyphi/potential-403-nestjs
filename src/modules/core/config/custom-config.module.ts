@@ -6,7 +6,7 @@ import Joi from 'joi';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env'],
+      envFilePath: ['.production.env', '.env'],
       isGlobal: true,
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().default('development'),

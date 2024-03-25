@@ -11,23 +11,30 @@ import {
   getObjectCommandDto,
   putObjectCommandDto,
 } from './dtos/s3-command.dto';
+import ENV_KEY from '../config/constants/env-config.constant';
 
 @Injectable()
 export class AwsS3Service {
   private readonly s3Client;
   private readonly AWS_REGION;
   private readonly AWS_S3_BUCKET_NAME;
+  private readonly NODE_MODE;
 
   constructor(private customConfigService: CustomConfigService) {
-    this.AWS_REGION = this.customConfigService.get('AWS_REGION');
-    this.AWS_S3_BUCKET_NAME =
-      this.customConfigService.get('AWS_S3_BUCKET_NAME');
+    this.NODE_MODE =
+      this.customConfigService.get(ENV_KEY.NODE_ENV) ?? 'development';
+    this.AWS_REGION = this.customConfigService.get(ENV_KEY.AWS_REGION);
+    this.AWS_S3_BUCKET_NAME = this.customConfigService.get(
+      ENV_KEY.AWS_S3_BUCKET_NAME,
+    );
 
     this.s3Client = new S3Client({
       region: this.AWS_REGION,
       credentials: {
-        accessKeyId: this.customConfigService.get('AWS_ACCESS_KEY'),
-        secretAccessKey: this.customConfigService.get('AWS_SECRET_ACCESS_KEY'),
+        accessKeyId: this.customConfigService.get(ENV_KEY.AWS_ACCESS_KEY),
+        secretAccessKey: this.customConfigService.get(
+          ENV_KEY.AWS_SECRET_ACCESS_KEY,
+        ),
       },
     });
   }
@@ -40,9 +47,7 @@ export class AwsS3Service {
     });
 
     await this.s3Client.send(putObjectCommand);
-
-    // 업로드된 이미지의 S3 버킷 URL 반환
-    return `https://s3.${this.AWS_REGION}.amazonaws.com/${this.AWS_S3_BUCKET_NAME}/${dto.Key}`;
+    return `https://s3.${this.AWS_REGION}.amazonaws.com/${this.AWS_S3_BUCKET_NAME}/${this.NODE_MODE}/${dto.Key}`;
   }
 
   async getImageUrlFromS3Bucket(dto: getObjectCommandDto) {
@@ -52,6 +57,7 @@ export class AwsS3Service {
     });
 
     await this.s3Client.send(getObjectCommand);
+    return `https://s3.${this.AWS_REGION}.amazonaws.com/${this.AWS_S3_BUCKET_NAME}/${this.NODE_MODE}/${dto.Key}`;
   }
 
   async deleteImageFromS3Bucket(dto: deleteObjectCommandDto) {
