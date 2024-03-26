@@ -8,19 +8,26 @@ import {
   Param,
   ParseIntPipe,
   UseGuards,
+  Header,
+  Res,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { UpdateUserRequestBodyDto } from '../dtos/req/create-user-request-body.dto';
 import { SignInUser } from 'src/decorators/sign-in-user.decorator';
 import { UserEntity } from '../entities/user.entity';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { SignInOrSignUpRequestBodyDto } from 'src/modules/users/dtos/req/sign-in-sign-up-request-body.dto';
 import { AuthService } from 'src/modules/core/auth/services/auth.service';
+import { CustomConfigService } from 'src/modules/core/config/custom-config.service';
+import { Request, Response } from 'express';
+import ENV_KEY from 'src/modules/core/config/constants/env-config.constant';
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 @Controller()
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
+    private readonly customConfigService: CustomConfigService,
     private readonly authService: AuthService,
   ) {}
 
@@ -58,10 +65,30 @@ export class UsersController {
   }
 
   // 소셜로그인겸 & 회원가입
-  @Post('sign-in')
-  async signInOrSignUp(@Body() body: SignInOrSignUpRequestBodyDto) {
-    const account = await this.authService.validateExternalAccessToken(body);
+  @Get('sign-in/kakao')
+  @Header('Content-Type', 'text/html')
+  async loadKakaoSignInPage(@Res() res: Response) {
+    console.log(this.customConfigService.get(ENV_KEY.KAKAO_CLIENT_ID));
+    console.log(this.customConfigService.get(ENV_KEY.KAKAO_CALLBACK_URL));
 
-    // const member =
+    // 카카오 로그인 페이지로 이동
+    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${this.customConfigService.get(ENV_KEY.KAKAO_CLIENT_ID)}&redirect_uri=${this.customConfigService.get(ENV_KEY.KAKAO_CALLBACK_URL)}`;
+    res.redirect(url);
   }
+
+  @ApiExcludeEndpoint()
+  @Get('sign-in/kakao/callback')
+  async signInKakaoCallback(@Query('code') code: string) {
+    console.log(code);
+    const result = await this.authService.signInKakao(code);
+    console.log(result);
+    return result;
+  }
+
+  // @Post('sign-in')
+  // async signInOrSignUp(@Body() body: SignInOrSignUpRequestBodyDto) {
+  //   const account = await this.authService.validateExternalAccessToken(body);
+
+  //   // const member =
+  // }
 }

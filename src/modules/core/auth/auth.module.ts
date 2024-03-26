@@ -14,11 +14,15 @@ import {
   GOOGLE_OAUTH_CLIENT_TOKEN,
   JWK_CLIENT_TOKEN,
 } from 'src/modules/core/auth/constants/auth.constant';
+import { UsersRepositoryImpl } from 'src/modules/users/repositories/users.repository';
+import { UsersRepository } from 'src/modules/users/repositories/users.interface';
+import { RedisModule } from 'src/modules/core/redis/redis.module';
 
 @Module({
   imports: [
     HttpModule,
     CustomConfigModule,
+    RedisModule,
     JwtModule.registerAsync({
       inject: [CustomConfigService],
       useFactory: (customConfigService: CustomConfigService) => {
@@ -47,6 +51,11 @@ import {
       useValue: jwksClient({
         jwksUri: 'https://appleid.apple.com/auth/keys',
       }),
+    },
+    // repositories
+    {
+      provide: UsersRepository,
+      useClass: UsersRepositoryImpl,
     },
   ],
   exports: [AuthService],

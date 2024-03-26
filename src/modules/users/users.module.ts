@@ -6,9 +6,10 @@ import { UserProfilesController } from './controllers/user-profiles.controller';
 import { UserProfileService } from './services/user-profiles.service';
 import { UsersRepository } from './repositories/users.interface';
 import { UsersRepositoryImpl } from './repositories/users.repository';
+import { CustomConfigModule } from 'src/modules/core/config/custom-config.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, CustomConfigModule],
   providers: [
     UsersService,
     UserProfileService,

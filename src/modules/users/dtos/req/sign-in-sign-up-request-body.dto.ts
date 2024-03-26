@@ -14,5 +14,5 @@ export class SignInOrSignUpRequestBodyDto {
     example: 'k',
     enum: OAuthSocialLoginType,
   })
-  loginType: OAuthSocialLoginType;
+  oauthProvider: OAuthSocialLoginType;
 }
