@@ -10,7 +10,7 @@ import ENV_KEY from 'src/modules/core/config/constants/env-config.constant';
 import { CustomConfigService } from 'src/modules/core/config/custom-config.service';
 import { PrismaService } from 'src/modules/core/database/prisma/prisma.service';
 import { RedisService } from 'src/modules/core/redis/redis.service';
-import JwtPayload from './jwt.payload';
+import JwtPayload from './trazzle-jwt.payload';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

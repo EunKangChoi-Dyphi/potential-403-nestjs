@@ -7,12 +7,19 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { firstValueFrom } from 'rxjs';
-import JwtPayload from 'src/modules/core/auth/jwt/jwt.payload';
+import TrazzleJwtPayload from 'src/modules/core/auth/jwt/trazzle-jwt.payload';
 import ENV_KEY from 'src/modules/core/config/constants/env-config.constant';
 import { CustomConfigService } from 'src/modules/core/config/custom-config.service';
 import { RedisService } from 'src/modules/core/redis/redis.service';
 import { UsersRepository } from 'src/modules/users/repositories/users.interface';
 import { OAuthSocialLoginType } from '../constants/oauth.constant';
+import jwt, { Jwt, JwtPayload } from 'jsonwebtoken';
+import JwksRsa, { SigningKey } from 'jwks-rsa';
+import { OAuth2Client, TokenInfo } from 'google-auth-library';
+import {
+  GOOGLE_OAUTH_CLIENT_TOKEN,
+  JWK_CLIENT_TOKEN,
+} from '../constants/auth.constant';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +27,14 @@ export class AuthService {
   constructor(
     private readonly customConfigService: CustomConfigService,
     @Inject(UsersRepository) private readonly userRepository: UsersRepository,
+
+    @Inject(GOOGLE_OAUTH_CLIENT_TOKEN)
+    private readonly googleOAuthClient: OAuth2Client,
+
     private readonly jwtService: JwtService,
+
+    @Inject(JWK_CLIENT_TOKEN)
+    private readonly jwksClient: JwksRsa.JwksClient,
     private readonly redisService: RedisService,
     private readonly httpService: HttpService,
   ) {
@@ -38,7 +52,7 @@ export class AuthService {
     }
   }
 
-  private async createAccessToken(payload: JwtPayload) {
+  private async createAccessToken(payload: TrazzleJwtPayload) {
     try {
       const { userId } = payload;
 
@@ -60,6 +74,56 @@ export class AuthService {
     }
   }
 
+  async signInKakao(oauthToken: string) {
+    try {
+      // 받은 토큰으로 회원정보 갖고오기
+      const userInfoKakao = await firstValueFrom(
+        this.httpService.get(`https://kapi.kakao.com/v2/user/me`, {
+          headers: {
+            Authorization: `Bearer ${oauthToken}`,
+          },
+        }),
+      );
+
+      if (
+        !userInfoKakao ||
+        !userInfoKakao.data ||
+        !userInfoKakao.data.kakao_account ||
+        !userInfoKakao.data.properties
+      ) {
+        throw new NotFoundException('존재하지 않은 회원입니다.');
+      }
+
+      // account 값이 해당되는 유저데이터 로우가 존재하는지 확인한다.
+      const { nickname, profile_image } = userInfoKakao.data.properties;
+      const { id } = userInfoKakao.data;
+      const account = `${OAuthSocialLoginType.Kakao}-${id}`;
+
+      let user = await this.userRepository.findOne({ account: account });
+      if (!user) {
+        // account 값이 해당하는 유저 데이터로우가 존재하지 않음 -> 등록
+        user = await this.userRepository.createUser({
+          account: account,
+          name: nickname,
+          profileImageURL: profile_image ?? null,
+          intro: null,
+        });
+      }
+
+      // 레디스에 액세스 토큰 등록
+      const access_token = await this.createAccessToken({
+        userId: user.id,
+        account: account,
+      });
+
+      return access_token;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /*
+  // for web application
   async signInKakao(code: string) {
     try {
       // 받은 코드로 토큰을 요청
@@ -122,16 +186,89 @@ export class AuthService {
       throw e;
     }
   }
+  */
 
-  async signInGoogle(code: string) {
+  async signInGoogle(oauthToken: string) {
     try {
+      // todo
+      const googleToken: TokenInfo =
+        await this.googleOAuthClient.getTokenInfo(oauthToken);
+
+      const account = `${OAuthSocialLoginType.Google}-${googleToken.aud}`;
+
+      let user = await this.userRepository.findOne({ account: account });
+      if (!user) {
+        // account 값이 해당하는 유저 데이터로우가 존재하지 않음 -> 등록
+        user = await this.userRepository.createUser({
+          account: account,
+          name: `apple-user-${googleToken.aud}`, // todo
+          profileImageURL: null,
+          intro: null,
+        });
+      }
+
+      // 레디스에 액세스 토큰 등록
+      const access_token = await this.createAccessToken({
+        userId: user.id,
+        account: account,
+      });
+
+      return access_token;
     } catch (e) {
       throw e;
     }
   }
 
-  async signInApple(code: string) {
+  async signInApple(oauthToken: string) {
     try {
+      // jwt 토큰 디코드
+      const decodedJWT: Jwt | null = jwt.decode(oauthToken, {
+        complete: true,
+      });
+
+      if (!decodedJWT?.header?.kid) {
+        throw new UnauthorizedException('유효하지 않은 토큰입니다.');
+      }
+
+      // 공개키
+      const applePublicKey: SigningKey = await this.jwksClient.getSigningKey(
+        decodedJWT.header.kid,
+      );
+
+      const appleSignedKey: string = applePublicKey.getPublicKey();
+
+      const { payload }: JwtPayload = jwt.verify(oauthToken, appleSignedKey, {
+        complete: true,
+      });
+
+      if (
+        !payload.nonce_supported ||
+        payload.iss !== 'https://appleid.apple.com'
+      ) {
+        throw new UnauthorizedException('유효하지 않은 토큰입니다.');
+      }
+
+      //todo - payload가 무엇인지 확인이 필요...
+      const account = `${OAuthSocialLoginType.Apple}-${payload.sub}`;
+
+      let user = await this.userRepository.findOne({ account: account });
+      if (!user) {
+        // account 값이 해당하는 유저 데이터로우가 존재하지 않음 -> 등록
+        user = await this.userRepository.createUser({
+          account: account,
+          name: `apple-user-${payload.sub}`, // todo
+          profileImageURL: null,
+          intro: null,
+        });
+      }
+
+      // 레디스에 액세스 토큰 등록
+      const access_token = await this.createAccessToken({
+        userId: user.id,
+        account: account,
+      });
+
+      return access_token;
     } catch (e) {
       throw e;
     }

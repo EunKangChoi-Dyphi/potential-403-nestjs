@@ -66,24 +66,38 @@ export class UsersController {
     return await this.authService.signOut(user.id);
   }
 
-  // 소셜로그인겸 & 회원가입
-  @Get('sign-in/kakao')
-  @Header('Content-Type', 'text/html')
-  async loadKakaoSignInPage(@Res() res: Response) {
-    console.log(this.customConfigService.get(ENV_KEY.KAKAO_CLIENT_ID));
-    console.log(this.customConfigService.get(ENV_KEY.KAKAO_CALLBACK_URL));
+  // 소셜로그인
+  // For web application
+  // @Get('sign-in/kakao')
+  // @Header('Content-Type', 'text/html')
+  // async signInKakao(@Res() res: Response) {
+  //   // 카카오 로그인 페이지로 이동
+  //   // 동의화면
+  //   const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${this.customConfigService.get(ENV_KEY.KAKAO_CLIENT_ID)}&redirect_uri=${this.customConfigService.get(ENV_KEY.KAKAO_CALLBACK_URL)}`;
+  //   res.redirect(url);
+  // }
 
-    // 카카오 로그인 페이지로 이동
-    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${this.customConfigService.get(ENV_KEY.KAKAO_CLIENT_ID)}&redirect_uri=${this.customConfigService.get(ENV_KEY.KAKAO_CALLBACK_URL)}`;
-    res.redirect(url);
+  // @ApiExcludeEndpoint()
+  // @Get('sign-in/kakao/callback')
+  // async signInKakaoCallback(@Query('code') code: string) {
+  //   const access_token = await this.authService.signInKakao(code);
+  //   return access_token;
+  // }
+  @Get('sign-in/kakao')
+  async signInKakao(oauthToken: string) {
+    const access_token = await this.authService.signInKakao(oauthToken);
+    return access_token;
   }
 
-  @ApiExcludeEndpoint()
-  @Get('sign-in/kakao/callback')
-  async signInKakaoCallback(@Query('code') code: string) {
-    console.log(code);
-    const result = await this.authService.signInKakao(code);
-    console.log(result);
-    return result;
+  @Get('sign-in/apple')
+  async signInApple(oauthToken: string) {
+    const access_token = await this.authService.signInApple(oauthToken);
+    return access_token;
+  }
+
+  @Get('sign-in/google')
+  async signInGoogle(oauthToken: string) {
+    const access_token = await this.authService.signInGoogle(oauthToken);
+    return access_token;
   }
 }
