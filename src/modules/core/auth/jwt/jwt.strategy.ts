@@ -26,7 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validateUser(payload: JwtPayload) {
+  async validate(payload: JwtPayload) {
     const { userId, account } = payload;
     try {
       // redis에 토큰이 존재하여 캐시히트인지 확인
@@ -45,6 +45,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       if (!user) {
         throw new NotFoundException('존재하지 않은 유저입니다.');
       }
+
+      return user;
     } catch (e) {
       throw e;
     }

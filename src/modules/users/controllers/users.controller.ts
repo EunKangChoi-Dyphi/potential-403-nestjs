@@ -59,6 +59,13 @@ export class UsersController {
     return await this.usersService.deleteUser(user.id);
   }
 
+  // 로그아웃
+  @UseGuards(JwtAuthGuard)
+  @Get('sign-out')
+  async signOut(@SignInUser() user: UserEntity) {
+    return await this.authService.signOut(user.id);
+  }
+
   // 소셜로그인겸 & 회원가입
   @Get('sign-in/kakao')
   @Header('Content-Type', 'text/html')

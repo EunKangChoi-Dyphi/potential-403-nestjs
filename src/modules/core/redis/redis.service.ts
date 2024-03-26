@@ -17,4 +17,8 @@ export class RedisService {
     // set(key, value, 5) => ttl: 5ms
     await this.cacheManager.set(key, value, { ttl: ttl ?? 1000 } as any);
   }
+
+  async del(key: string) {
+    await this.cacheManager.del(key);
+  }
 }

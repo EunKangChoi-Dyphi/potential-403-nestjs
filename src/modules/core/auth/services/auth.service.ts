@@ -28,9 +28,11 @@ export class AuthService {
       ENV_KEY.JWT_ACCESS_TOKEN_EXPIRATION_TTL,
     );
   }
-  async signUpNewUser() {
-    // 소셜로그인했는데 회원이 존재하지 않으면 회원가입처리
+  async signOut(userId: number) {
     try {
+      // access 토큰을 찾아서 삭제한다.
+      const key = `user-${userId}`;
+      await this.redisService.del(key);
     } catch (e) {
       throw e;
     }
