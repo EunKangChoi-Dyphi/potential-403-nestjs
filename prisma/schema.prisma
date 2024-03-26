@@ -48,7 +48,7 @@ model User {
   
   intro String?
 
-  imageURL String?
+  profileImageURL String?
 
 
   // // TO BE REMOVED

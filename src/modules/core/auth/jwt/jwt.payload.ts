@@ -1,5 +1,5 @@
 interface JwtPayload {
-  userId: string;
+  userId: number;
   account: string;
 }
 

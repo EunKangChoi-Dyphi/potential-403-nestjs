@@ -35,7 +35,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async getOneUser(
-    // @Param('id', ParseIntPipe) id: number,
     @SignInUser() user: UserEntity, // login required
   ) {
     return await this.usersService.getOneUser(user.id);
@@ -45,7 +44,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Patch()
   async updateUser(
-    // @Param('id', ParseIntPipe) id: number,
     @SignInUser() user: UserEntity,
     @Body() body: UpdateUserRequestBodyDto,
   ) {
@@ -56,10 +54,7 @@ export class UsersController {
   // 회원탈퇴
   @UseGuards(JwtAuthGuard)
   @Delete()
-  async withdrawUser(
-    @SignInUser() user: UserEntity,
-    // @Param('id', ParseIntPipe) id: number,
-  ) {
+  async withdrawUser(@SignInUser() user: UserEntity) {
     // 탈퇴처리된 유저는 DB에 해당 데이터로우 삭제
     return await this.usersService.deleteUser(user.id);
   }
@@ -84,11 +79,4 @@ export class UsersController {
     console.log(result);
     return result;
   }
-
-  // @Post('sign-in')
-  // async signInOrSignUp(@Body() body: SignInOrSignUpRequestBodyDto) {
-  //   const account = await this.authService.validateExternalAccessToken(body);
-
-  //   // const member =
-  // }
 }

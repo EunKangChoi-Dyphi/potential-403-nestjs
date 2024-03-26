@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -6,6 +10,7 @@ import ENV_KEY from 'src/modules/core/config/constants/env-config.constant';
 import { CustomConfigService } from 'src/modules/core/config/custom-config.service';
 import { PrismaService } from 'src/modules/core/database/prisma/prisma.service';
 import { RedisService } from 'src/modules/core/redis/redis.service';
+import JwtPayload from './jwt.payload';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -21,23 +26,25 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validateUser(payload: any) {
+  async validateUser(payload: JwtPayload) {
+    const { userId, account } = payload;
     try {
       // redis에 토큰이 존재하여 캐시히트인지 확인
-      const token = await this.redisService.get('');
+      const tokenFromRedis = await this.redisService.get(`user-${userId}`);
 
-      // redis에 없으면 DB에 조회
+      if (!tokenFromRedis) {
+        throw new UnauthorizedException('토큰이 만료하였습니다.');
+      }
+
       const user: User | null = await this.prismaService.user.findFirst({
         where: {
-          id: payload.id,
+          OR: [{ id: userId }, { account: account }],
         },
       });
 
       if (!user) {
-        throw new UnauthorizedException('로그인에 실패하였습니다.');
+        throw new NotFoundException('존재하지 않은 유저입니다.');
       }
-
-      return user;
     } catch (e) {
       throw e;
     }
