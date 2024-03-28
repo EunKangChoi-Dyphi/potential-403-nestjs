@@ -16,11 +16,12 @@ jobs:
           username: ${{ secrets.REMOTE_SERVER_USERNAME }}
           password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           script: |
-            docker rm -f $(docker ps -aq) >/dev/null 2>&1
-            docker rmi -f $(docker images -q) >/dev/null 2>&1
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
-            docker run -d -p 80:10655 \
-            -e NODE_ENV=production \
-            -e SERVER_PORT=10655 \
-            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
+            echo ${{ secrets }} >> /app/test.txt
+#            docker rm -f $(docker ps -aq) >/dev/null 2>&1
+#            docker rmi -f $(docker images -q) >/dev/null 2>&1
+#            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
+#            docker run -d -p 80:10655 \
+#            -e NODE_ENV=production \
+#            -e SERVER_PORT=10655 \
+#            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+#            ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
