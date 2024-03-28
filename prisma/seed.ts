@@ -1,9 +1,11 @@
 // prisma/seed.ts
 import { PrismaClient } from '@prisma/client';
+import citySeed from './functions/city.seed';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  await citySeed(prisma);
   // await prisma.user.create({
   //   data: {
   //     email: 'trazzle@trazzle.com',
