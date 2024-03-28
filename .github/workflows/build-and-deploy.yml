@@ -7,12 +7,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      current_time: ${{ steps.set_time.outputs.current_time }}
     steps:
-      - name: Set Current Timestamp
-        id: current_time
-        run: echo "::set-output name=time::$(date +'%Y%m%d_%H%M')"
-      - name: Use current time
-        run: echo "The current time is ${{ steps.current_time.outputs.time }}"
+      - name: Get current time
+        id: set_time
+        run: echo "current_time=$(date +'%Y%m%d_%H%M')" >> $GITHUB_ENV
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Set up Node.js
@@ -23,7 +23,7 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ steps.current_time.outputs.time }} .
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ steps.current_time.outputs.time }}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ steps.set_time.outputs.current_time }}
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -38,4 +38,4 @@ jobs:
           script: |
             docker rm -f $(docker ps -aq) >/dev/null 2>&1
             docker rmi -f $(docker images -q) >/dev/null 2>&1
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ needs.build.steps.steps.current_time.outputs.time }}
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ needs.build.outputs.current_time }}
