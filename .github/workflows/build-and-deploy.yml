@@ -46,9 +46,9 @@ jobs:
             -e SERVER_PORT=10655 \
             -e DB_USER=${{ secrets.DB_USER }} \
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -e DB_HOST=${{ secrets.DB_HOST }} \
-            -e DB_PORT=${{ secrets.DB_PORT }} \
-            -e DB_NAME=${{ secrets.DB_NAME }} \
+#            -e DB_HOST=${{ secrets.DB_HOST }} \
+#            -e DB_PORT=${{ secrets.DB_PORT }} \
+#            -e DB_NAME=${{ secrets.DB_NAME }} \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
             -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
             -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
@@ -56,7 +56,7 @@ jobs:
             -e KAKAO_SECRET_KEY=${{ secrets.KAKAO_SECRET_KEY }} \
             -e KAKAO_CALLBACK_URL=${{ secrets.KAKAO_CALLBACK_URL }} \
             -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
-            -e APPLE_CLIENT_ID=${{ secrets.APPLE_CLIENT_ID }} \
+            -e APPLE_CLIENT_ID=TBD \
             -e AWS_REGION=${{ secrets.AWS_REGION }} \
             -e AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
@@ -64,4 +64,4 @@ jobs:
             -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
             -e JWT_ACCESS_TOKEN_EXPIRATION=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION }} \
             -e JWT_ACCESS_TOKEN_EXPIRATION_TTL=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TTL }} \
-            ${{ secrets.DOCKER_HUB_USERNAMES }}/trazzle-api:20240328_0839
+            ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
