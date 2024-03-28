@@ -7,6 +7,7 @@ import { UsersModule } from '../../users/users.module';
 import { UsersService } from '../../users/services/users.service';
 import { UserEntity } from '../../users/entities/user.entity';
 import { PrismaService } from 'src/modules/core/database/prisma/prisma.service';
+import { LocalDate } from '@js-joda/core';
 
 describe('TravelsService', () => {
 
@@ -47,11 +48,13 @@ describe('TravelsService', () => {
     it('여행 기록을 생성 한다.', async () => {
 
       const dto: CreateTravelNoteDto  = {
+        title: '여행',
         city: 'Seoul',
-        startDate: new Date(2024, 2, 24), // 2024-03-24
-        endDate: new Date(2024, 2, 26), // 2024-03-26
+        startDate: LocalDate.of(2024, 3, 24), //
+        endDate: LocalDate.of(2024, 3, 26), //
         review: 'Good',
         userId: 1,
+        validate() {}
       }
 
       const travels = await travelsService.create(dto);
