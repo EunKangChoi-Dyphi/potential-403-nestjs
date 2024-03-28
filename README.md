@@ -22,11 +22,6 @@ $ npx prisma
 $ npx prisma migrate dev --name init
 ```
 
-- 테스트 데이터 생성 (개발용)
-```bash
-$ npx ts-node prisma/seed.ts
-```
-
 - Prisma client 생성
   - Prisma 공식자료: [Generating Prisma Client](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/generating-prisma-client)
 

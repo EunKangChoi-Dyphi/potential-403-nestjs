@@ -55,7 +55,7 @@ model TravelImage {
 }
 
 model Country {
-  id        Int      @id @default(autoincrement()) // PK
+  code      String   @id
   name      String   @unique
   continent String? // 대륙
   createdAt DateTime @default(now()) // 생성일
@@ -64,10 +64,10 @@ model Country {
 }
 
 model City {
-  id        Int      @id @default(autoincrement()) // PK
-  name      String   @unique
-  country   Country  @relation(fields: [countryId], references: [id])
-  countryId Int // 참조키
-  createdAt DateTime @default(now()) // 생성일
-  updatedAt DateTime @updatedAt // 수정일
+  id          Int      @id @default(autoincrement()) // PK
+  name        String   @unique
+  country     Country  @relation(fields: [countryCode], references: [code])
+  countryCode String // 참조키
+  createdAt   DateTime @default(now()) // 생성일
+  updatedAt   DateTime @updatedAt // 수정일
 }

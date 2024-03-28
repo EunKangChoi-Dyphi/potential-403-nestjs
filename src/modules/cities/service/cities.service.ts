@@ -12,8 +12,8 @@ export class CitiesService {
     return this.cityRepository.create(createCityDto);
   }
 
-  findAll(countryId?: number) {
-    return this.cityRepository.findMany(countryId);
+  findAll(countryCode?: string) {
+    return this.cityRepository.findMany(countryCode);
   }
 
   update(id: number, updateCityDto: UpdateCityDto) {

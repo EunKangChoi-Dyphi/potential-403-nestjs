@@ -13,6 +13,7 @@ export class CountryRepositoryImpl implements CountryRepository {
   async create(dto: CreateCountryDto): Promise<CountryEntity> {
     return this.prismaService.country.create({
       data: {
+        code: dto.code,
         name: dto.name,
         continent: dto.continent,
       },
@@ -23,16 +24,17 @@ export class CountryRepositoryImpl implements CountryRepository {
     return this.prismaService.country.findMany();
   }
 
-  async delete(id: number): Promise<CountryEntity> {
+  async delete(code: string): Promise<CountryEntity> {
     return this.prismaService.country.delete({
-      where: { id },
+      where: { code },
     });
   }
 
-  async update(id: number, dto: UpdateCountryDto): Promise<CountryEntity> {
+  async update(code: string, dto: UpdateCountryDto): Promise<CountryEntity> {
     return this.prismaService.country.update({
-      where: { id },
+      where: { code },
       data: {
+        code: dto.code,
         name: dto.name,
         continent: dto.continent,
       },

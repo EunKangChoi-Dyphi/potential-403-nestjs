@@ -5,7 +5,7 @@ import { UpdateCityDto } from 'src/modules/cities/dto/update-city.dto';
 export interface CityRepository {
   create(dto: CreateCityDto): Promise<CityEntity>;
 
-  findMany(countryId?: number): Promise<CityEntity[]>;
+  findMany(countryCode?: string): Promise<CityEntity[]>;
   delete(id: number): Promise<CityEntity>;
   update(id: number, dto: UpdateCityDto): Promise<CityEntity>;
 }

@@ -12,13 +12,13 @@ export class CityRepositoryImpl implements CityRepository {
     return this.prismaService.city.create({
       data: {
         name: dto.name,
-        countryId: dto.countryId,
+        countryCode: dto.countryCode,
       },
     });
   }
 
-  findMany(countryId?: number): Promise<CityEntity[]> {
-    const where = countryId ? { countryId } : {};
+  findMany(countryCode?: string): Promise<CityEntity[]> {
+    const where = countryCode ? { countryCode } : {};
     return this.prismaService.city.findMany({ where });
   }
 
@@ -32,7 +32,7 @@ export class CityRepositoryImpl implements CityRepository {
       where: { id },
       data: {
         name: dto.name,
-        countryId: dto.countryId,
+        countryCode: dto.countryCode,
       },
     });
   }
