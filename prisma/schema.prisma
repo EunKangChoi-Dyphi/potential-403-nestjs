@@ -37,8 +37,8 @@ model User {
   posts Post[]
 
   // User:Profile = 1:1(0)
-  profile Profile?
-  Travel  Travel[]
+  profile    Profile?
+  TravelNote TravelNote[]
 }
 
 model Profile {
@@ -60,12 +60,11 @@ model TravelNote {
   createdAt DateTime @default(now()) // 생성일
   updatedAt DateTime @updatedAt // 수정일
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-
   city String // 도시
 
   images TravelImage[]
+  User   User?         @relation(fields: [userId], references: [id])
+  userId Int?
 }
 
 // 여행 이미지
@@ -74,6 +73,6 @@ model TravelImage {
   url       String // 이미지 URL
   createdAt DateTime @default(now()) // 생성일
 
-  travel   Travel @relation(fields: [travelId], references: [id])
+  travel   TravelNote @relation(fields: [travelId], references: [id])
   travelId Int // 참조키
 }
