@@ -21,7 +21,7 @@ jobs:
           node-version: '20'
       - name: Docker Build And Push
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ steps.current_time.outputs.time }} .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ steps.set_time.outputs.current_time }} .
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ steps.set_time.outputs.current_time }}
   deploy:
