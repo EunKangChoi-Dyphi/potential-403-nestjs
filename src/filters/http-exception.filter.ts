@@ -2,14 +2,14 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
-  HttpException, Logger,
+  HttpException,
+  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorResponseDto } from 'src/filters/error-response.dto';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-
   private readonly logger = new Logger(HttpExceptionFilter.name);
 
   catch(exception: HttpException, host: ArgumentsHost) {
@@ -20,7 +20,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const exceptionResponse = exception.getResponse();
     let body: ErrorResponseDto;
 
-
     if (typeof exceptionResponse === 'string') {
       body = {
         path: request.url,
@@ -28,7 +27,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         error: exceptionResponse,
         statusCode: statusCode,
         message: [exceptionResponse],
-      }
+      };
 
       this.logger.error(exceptionResponse, exception.stack);
     } else {
@@ -38,7 +37,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         error: exceptionResponse['error'],
         statusCode: exceptionResponse['statusCode'],
         message: exceptionResponse['message'],
-      }
+      };
 
       this.logger.error(exceptionResponse['message'], exception.stack);
     }

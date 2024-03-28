@@ -14,40 +14,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// sample
-model Post {
-  id        Int     @id @default(autoincrement()) // PK
-  title     String  @db.VarChar(255) // 제목
-  content   String? // 내용
-  published Boolean @default(false) // 발행여부
-
-  // authorId 는 User.id 를 참조함.
-  author   User @relation(fields: [authorId], references: [id]) // 저자
-  authorId Int // 참조키
-
-  createdAt DateTime @default(now()) // 생성일
-  updatedAt DateTime @updatedAt // 수정일
-}
-
 model User {
   id    Int     @id @default(autoincrement()) // PK
-  email String  @unique // 이메일
+  // kakao(k-XXXX), google(g-XXXX), apple(a-XXXX)
+  account String @unique 
   name  String?
 
-  // User:Post = 1:N
-  posts Post[]
+  intro String?
+  profileImageURL String?
 
-  // User:Profile = 1:1(0)
-  profile    Profile?
   TravelNote TravelNote[]
-}
 
-model Profile {
-  id Int @id @default(autoincrement())
-
-  // userId는 User.id를 참조함
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
 }
 
 // 여행
