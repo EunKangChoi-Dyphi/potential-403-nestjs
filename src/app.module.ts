@@ -6,14 +6,16 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { APP_FILTER, APP_PIPE, RouterModule } from '@nestjs/core';
 import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
 import { UsersModule } from './modules/users/users.module';
-import { TravelsModule } from './modules/travels/travels.module';
+import { TravelNotesModule } from 'src/modules/travel-notes/travel-notes.module';
+import { AllExceptionFilter } from 'src/filters/all-exception.filter';
+
 
 @Module({
   imports: [
     ...MainModules,
     RouterModule.register([
       { path: '/api/users', module: UsersModule },
-      { path: '/api/travels', module: TravelsModule },
+      { path: '/api/travel-notes', module: TravelNotesModule },
     ]),
   ],
   controllers: [AppController],
@@ -23,10 +25,6 @@ import { TravelsModule } from './modules/travels/travels.module';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
     },
   ],
 })
