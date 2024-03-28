@@ -2,28 +2,38 @@
 
 # Base Image
 ARG NODE_VERSION=20.10.0
+#ARG NODE_ENV=production
 
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:${NODE_VERSION} as builder
 
 # Set working directory for all build stages.
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json so that package manager commands can be used.
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json /.
+COPY /src/ /app/src/
+COPY /prisma /app//prisma/
+COPY /package*.json /tsconfig* /nest-cli.json /app/
 
 # Install app dependencies
 RUN npm install
-
-# Bundle app source
-COPY . .
-
-# Creates a "dist" folder with the production build
 RUN npm run build
 
-# Expose the port that the application listens on.
-EXPOSE 10655
+## Creates a "dist" folder with the production build
+#CMD ["npm", "run", "build"]
 
-# Run the application.
-CMD ["npm", "run", "start"]
+FROM node:${NODE_VERSION}-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app ./
+
+## Expose the port that the application listens on.
+EXPOSE 10655
+RUN npx prisma generate
+
+## Run the application.
+ENTRYPOINT ["npm", "run", "start"]
+#CMD tail -f /dev/null
+

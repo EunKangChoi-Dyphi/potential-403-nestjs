@@ -1,0 +1,43 @@
+name: Build And Deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      current_time: ${{ steps.current_time.outputs.time }}
+    steps:
+      - name: Set Current Timestamp
+        id: current_time
+        run: echo "::set-output name=time::$(date +'%Y%m%d_%H%M')"
+      - name: Use current time
+        run: echo "The current time is ${{ steps.current_time.outputs.time }}"
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+      - name: Docker Build And Push
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ steps.current_time.outputs.time }} .
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ steps.current_time.outputs.time }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Access to Remove Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_SERVER_HOST }}
+          port: ${{ secrets.REMOTE_SERVER_PORT }}
+          username: ${{ secrets.REMOTE_SERVER_USERNAME }}
+          password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
+          script: |
+            docker rm -f $(docker ps -aq) >/dev/null 2>&1
+            docker rmi -f $(docker images -q) >/dev/null 2>&1
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ needs.build.outputs.current_time }}
