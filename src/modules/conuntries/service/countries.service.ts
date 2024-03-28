@@ -18,11 +18,11 @@ export class CountriesService {
     return this.countryRepository.findMany();
   }
 
-  update(id: number, dto: UpdateCountryDto) {
-    return this.countryRepository.update(id, dto);
+  update(code: string, dto: UpdateCountryDto) {
+    return this.countryRepository.update(code, dto);
   }
 
-  delete(id: number) {
-    return this.countryRepository.delete(id);
+  delete(code: string) {
+    return this.countryRepository.delete(code);
   }
 }

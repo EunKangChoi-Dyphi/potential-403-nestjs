@@ -5,8 +5,8 @@ import { UpdateCountryDto } from 'src/modules/conuntries/dtos/update-country.dto
 export interface CountryRepository {
   create(dto: CreateCountryDto): Promise<CountryEntity>;
   findMany(): Promise<CountryEntity[]>;
-  delete(id: number): Promise<CountryEntity>;
-  update(id: number, dto: UpdateCountryDto): Promise<CountryEntity>;
+  delete(code: string): Promise<CountryEntity>;
+  update(code: string, dto: UpdateCountryDto): Promise<CountryEntity>;
 }
 
 export const CountryRepository = Symbol('CountryRepository');

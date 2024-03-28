@@ -26,13 +26,13 @@ export class CountriesController {
     return this.countriesService.findAll();
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateCountryDto) {
-    return this.countriesService.update(+id, dto);
+  @Put(':code')
+  update(@Param('code') code: string, @Body() dto: UpdateCountryDto) {
+    return this.countriesService.update(code, dto);
   }
 
-  @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return this.countriesService.delete(id);
+  @Delete(':code')
+  delete(@Param('code') code: string) {
+    return this.countriesService.delete(code);
   }
 }
