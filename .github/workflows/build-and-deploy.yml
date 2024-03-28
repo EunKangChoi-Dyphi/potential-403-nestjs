@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Get current time
         id: set_time
-        run: echo "current_time=$(date +'%Y%m%d_%H%M')" >> $GITHUB_ENV
+        run: echo "::set-output name=current_time::$(date +'%Y%m%d_%H%M')" >> $GITHUB_ENV
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Set up Node.js
