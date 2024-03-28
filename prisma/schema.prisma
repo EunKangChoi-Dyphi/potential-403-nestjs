@@ -5,8 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -38,7 +37,8 @@ model User {
   posts Post[]
 
   // User:Profile = 1:1(0)
-  profile Profile?
+  profile    Profile?
+  TravelNote TravelNote[]
 }
 
 model Profile {
@@ -47,4 +47,32 @@ model Profile {
   // userId는 User.id를 참조함
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
+}
+
+// 여행
+model TravelNote {
+  id        Int    @id @default(autoincrement()) // PK
+  startDate String // 여행 시작일
+  endDate   String // 여행 종료일
+
+  title     String // 제목
+  review    String? // 여행기
+  createdAt DateTime @default(now()) // 생성일
+  updatedAt DateTime @updatedAt // 수정일
+
+  city String // 도시
+
+  images TravelImage[]
+  User   User?         @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+// 여행 이미지
+model TravelImage {
+  id        Int      @id @default(autoincrement()) // PK
+  url       String // 이미지 URL
+  createdAt DateTime @default(now()) // 생성일
+
+  travel   TravelNote @relation(fields: [travelId], references: [id])
+  travelId Int // 참조키
 }
