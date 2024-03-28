@@ -60,4 +60,14 @@ model Country {
   continent String? // 대륙
   createdAt DateTime @default(now()) // 생성일
   updatedAt DateTime @updatedAt // 수정일
+  City      City[]
+}
+
+model City {
+  id        Int      @id @default(autoincrement()) // PK
+  name      String   @unique
+  country   Country  @relation(fields: [countryId], references: [id])
+  countryId Int // 참조키
+  createdAt DateTime @default(now()) // 생성일
+  updatedAt DateTime @updatedAt // 수정일
 }
