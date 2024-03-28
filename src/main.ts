@@ -1,4 +1,4 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { CustomConfigService } from './modules/core/config/custom-config.service';
 import ENV_KEY from './modules/core/config/constants/env-config.constant';
@@ -9,6 +9,7 @@ import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionFilter } from 'src/filters/all-exception.filter';
 import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
+import '@js-joda/timezone';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
