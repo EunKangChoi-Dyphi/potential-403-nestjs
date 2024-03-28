@@ -19,7 +19,6 @@ COPY /package*.json /tsconfig* /nest-cli.json /app/
 # Install app dependencies
 RUN npm install
 RUN npm run build
-RUN npx prisma generate
 
 ## Creates a "dist" folder with the production build
 #CMD ["npm", "run", "build"]
@@ -28,12 +27,11 @@ FROM node:${NODE_VERSION}-alpine
 
 WORKDIR /app
 
-ENV NODE_ENV production
-
 COPY --from=builder /app ./
 
 ## Expose the port that the application listens on.
 EXPOSE 10655
+RUN npx prisma generate
 
 ## Run the application.
 ENTRYPOINT ["npm", "run", "start"]
