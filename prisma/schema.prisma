@@ -15,16 +15,15 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement()) // PK
+  id      Int     @id @default(autoincrement()) // PK
   // kakao(k-XXXX), google(g-XXXX), apple(a-XXXX)
-  account String @unique 
-  name  String?
+  account String  @unique
+  name    String?
 
-  intro String?
+  intro           String?
   profileImageURL String?
 
   TravelNote TravelNote[]
-
 }
 
 // 여행
@@ -53,4 +52,12 @@ model TravelImage {
 
   travel   TravelNote @relation(fields: [travelId], references: [id])
   travelId Int // 참조키
+}
+
+model Country {
+  id        Int      @id @default(autoincrement()) // PK
+  name      String   @unique
+  continent String? // 대륙
+  createdAt DateTime @default(now()) // 생성일
+  updatedAt DateTime @updatedAt // 수정일
 }
