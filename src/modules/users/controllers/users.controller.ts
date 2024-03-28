@@ -1,16 +1,11 @@
 import {
   Body,
   Controller,
-  Get,
-  Post,
-  Patch,
   Delete,
-  Param,
-  ParseIntPipe,
-  UseGuards,
-  Header,
-  Res,
+  Get,
+  Patch,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { UpdateUserRequestBodyDto } from '../dtos/req/create-user-request-body.dto';
@@ -19,9 +14,6 @@ import { UserEntity } from '../entities/user.entity';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { AuthService } from 'src/modules/core/auth/services/auth.service';
 import { CustomConfigService } from 'src/modules/core/config/custom-config.service';
-import { Request, Response } from 'express';
-import ENV_KEY from 'src/modules/core/config/constants/env-config.constant';
-import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 @Controller()
 export class UsersController {
@@ -99,5 +91,10 @@ export class UsersController {
   async signInGoogle(oauthToken: string) {
     const access_token = await this.authService.signInGoogle(oauthToken);
     return access_token;
+  }
+
+  @Get('sign-in/account')
+  async signInAccount(@Query('account') account: string) {
+    return this.authService.signInAccount(account);
   }
 }

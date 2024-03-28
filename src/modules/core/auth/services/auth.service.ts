@@ -99,7 +99,7 @@ export class AuthService {
       const { id } = userInfoKakao.data;
       const account = `${OAuthSocialLoginType.Kakao}-${id}`;
 
-      let user = await this.userRepository.findOne({ account: account });
+      let user = await this.userRepository.findOne({ account });
       if (!user) {
         // account 값이 해당하는 유저 데이터로우가 존재하지 않음 -> 등록
         user = await this.userRepository.createUser({
@@ -196,7 +196,7 @@ export class AuthService {
 
       const account = `${OAuthSocialLoginType.Google}-${googleToken.aud}`;
 
-      let user = await this.userRepository.findOne({ account: account });
+      let user = await this.userRepository.findOne({ account });
       if (!user) {
         // account 값이 해당하는 유저 데이터로우가 존재하지 않음 -> 등록
         user = await this.userRepository.createUser({
@@ -251,7 +251,7 @@ export class AuthService {
       //todo - payload가 무엇인지 확인이 필요...
       const account = `${OAuthSocialLoginType.Apple}-${payload.sub}`;
 
-      let user = await this.userRepository.findOne({ account: account });
+      let user = await this.userRepository.findOne({ account });
       if (!user) {
         // account 값이 해당하는 유저 데이터로우가 존재하지 않음 -> 등록
         user = await this.userRepository.createUser({
@@ -272,5 +272,20 @@ export class AuthService {
     } catch (e) {
       throw e;
     }
+  }
+
+  async signInAccount(account: string) {
+    const user = await this.userRepository.findOne({ account });
+
+    if (!user) {
+      throw new NotFoundException('존재하지 않는 회원입니다.');
+    }
+
+    const access_token = await this.createAccessToken({
+      userId: user.id,
+      account: account,
+    });
+
+    return access_token;
   }
 }
