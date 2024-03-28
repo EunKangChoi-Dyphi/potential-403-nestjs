@@ -38,4 +38,4 @@ jobs:
           script: |
             docker rm -f $(docker ps -aq) >/dev/null 2>&1
             docker rmi -f $(docker images -q) >/dev/null 2>&1
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ needs.build.outputs.time }}
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ needs.build.steps.steps.current_time.outputs.time }}
