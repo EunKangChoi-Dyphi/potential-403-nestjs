@@ -13,7 +13,7 @@ export class UsersService {
    * @param userId
    */
   async getOneUser(userId: number) {
-    const user = await this.userRepository.findUserById(userId);
+    const user = await this.userRepository.findOne({ id: userId });
     return user;
   }
 

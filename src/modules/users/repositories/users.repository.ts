@@ -4,6 +4,7 @@ import { PrismaService } from 'src/modules/core/database/prisma/prisma.service';
 import { CreateUserDto } from '../dtos/req/create-user.dto';
 import { UpdateUserDto } from '../dtos/req/update-user.dto';
 import { UserEntity } from '../entities/user.entity';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersRepositoryImpl implements UsersRepository {
@@ -18,15 +19,22 @@ export class UsersRepositoryImpl implements UsersRepository {
     return newUser;
   }
 
-  async findUserById(userId: number): Promise<UserEntity> {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        id: userId,
-      },
+  async findOne(where: Prisma.UserWhereInput): Promise<UserEntity | null> {
+    const user = await this.prismaService.user.findFirst({
+      where,
     });
 
     return user;
   }
+  // async findOneByUserId(userId: number): Promise<UserEntity> {
+  //   const user = await this.prismaService.user.findUnique({
+  //     where: {
+  //       id: userId,
+  //     },
+  //   });
+
+  //   return user;
+  // }
 
   async updateUser(dto: UpdateUserDto): Promise<UserEntity> {
     const data = dto.name ? { name: dto.name } : {};

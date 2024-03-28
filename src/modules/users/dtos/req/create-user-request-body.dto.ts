@@ -3,9 +3,13 @@ import { UserEntity } from '../../entities/user.entity';
 import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserRequestBodyDto extends PartialType(
-  PickType(UserEntity, ['name']),
+  PickType(UserEntity, ['name', 'intro']),
 ) {
   @IsOptional()
   @IsString()
   name?: string;
+
+  @IsOptional()
+  @IsString()
+  intro?: string;
 }
