@@ -19,24 +19,8 @@ jobs:
             docker rm -f $(docker ps -aq) >/dev/null 2>&1
             docker rmi -f $(docker images -q) >/dev/null 2>&1
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
-            docker run -d -p 80:10655 --name trazzle-api \
+            docker run -d -p 80:10655 \
             -e NODE_ENV=production \
             -e SERVER_PORT=10655 \
-            -e DB_USER=${{ secrets.DB_USER }} \
-            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
-            -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
-            -e KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }} \
-            -e KAKAO_SECRET_KEY=${{ secrets.KAKAO_SECRET_KEY }} \
-            -e KAKAO_CALLBACK_URL=${{ secrets.KAKAO_CALLBACK_URL }} \
-            -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
-            -e APPLE_CLIENT_ID=TBD \
-            -e AWS_REGION=${{ secrets.AWS_REGION }} \
-            -e AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} \
-            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -e AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }} \
-            -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
-            -e JWT_ACCESS_TOKEN_EXPIRATION=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION }} \
-            -e JWT_ACCESS_TOKEN_EXPIRATION_TTL=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TTL }} \
             ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
