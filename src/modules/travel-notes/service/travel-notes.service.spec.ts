@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaModule } from '../../core/database/prisma/prisma.module';
-import { TravelsModule } from '../travels.module';
-import { TravelsService } from './travels.service';
-import { CreateTravelDto } from '../dtos/req/create-travel.dto';
+import { TravelNotesModule } from '../travel-notes.module';
+import { TravelNotesService } from './travel-notes.service';
+import { CreateTravelNoteDto } from '../dtos/req/create-travel-note.dto';
 import { UsersModule } from '../../users/users.module';
 import { UsersService } from '../../users/services/users.service';
 import { UserEntity } from '../../users/entities/user.entity';
@@ -10,17 +10,17 @@ import { PrismaService } from 'src/modules/core/database/prisma/prisma.service';
 
 describe('TravelsService', () => {
 
-  let travelsService: TravelsService;
+  let travelsService: TravelNotesService;
   let usersService: UsersService;
   let prismaService: PrismaService;
   let user: UserEntity;
 
   beforeAll(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule, TravelsModule, UsersModule],
+      imports: [PrismaModule, TravelNotesModule, UsersModule],
     }).compile();
 
-    travelsService = app.get<TravelsService>(TravelsService);
+    travelsService = app.get<TravelNotesService>(TravelNotesService);
     prismaService = app.get<PrismaService>(PrismaService);
   });
 
@@ -46,7 +46,7 @@ describe('TravelsService', () => {
   describe('여행 기록 생성', () => {
     it('여행 기록을 생성 한다.', async () => {
 
-      const dto: CreateTravelDto  = {
+      const dto: CreateTravelNoteDto  = {
         city: 'Seoul',
         startDate: new Date(2024, 2, 24), // 2024-03-24
         endDate: new Date(2024, 2, 26), // 2024-03-26
@@ -54,7 +54,7 @@ describe('TravelsService', () => {
         userId: 1,
       }
 
-      const travels = await travelsService.createTravel(dto);
+      const travels = await travelsService.create(dto);
       expect(travels).toBeDefined();
     });
   });
