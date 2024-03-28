@@ -29,7 +29,7 @@ jobs:
     needs: build
     steps:
       - name: Access to Remove Server
-        uses: appleboy/ssh-action@
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.REMOTE_SERVER_HOST }}
           port: ${{ secrets.REMOTE_SERVER_PORT }}
