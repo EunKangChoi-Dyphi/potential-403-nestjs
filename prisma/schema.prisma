@@ -51,9 +51,9 @@ model Profile {
 
 // 여행
 model TravelNote {
-  id        Int      @id @default(autoincrement()) // PK
-  startDate DateTime @db.Date // 여행 시작일
-  endDate   DateTime @db.Date // 여행 종료일
+  id        Int    @id @default(autoincrement()) // PK
+  startDate String // 여행 시작일
+  endDate   String // 여행 종료일
 
   title     String // 제목
   review    String? // 여행기
