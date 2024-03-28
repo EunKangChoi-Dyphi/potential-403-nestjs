@@ -37,7 +37,8 @@ model TravelNote {
   createdAt DateTime @default(now()) // 생성일
   updatedAt DateTime @updatedAt // 수정일
 
-  city String // 도시
+  city   City @relation(fields: [cityId], references: [id])
+  cityId Int
 
   images TravelImage[]
   User   User?         @relation(fields: [userId], references: [id])
@@ -64,10 +65,11 @@ model Country {
 }
 
 model City {
-  id          Int      @id @default(autoincrement()) // PK
-  name        String   @unique
-  country     Country  @relation(fields: [countryCode], references: [code])
+  id          Int          @id @default(autoincrement()) // PK
+  name        String       @unique
+  country     Country      @relation(fields: [countryCode], references: [code])
   countryCode String // 참조키
-  createdAt   DateTime @default(now()) // 생성일
-  updatedAt   DateTime @updatedAt // 수정일
+  createdAt   DateTime     @default(now()) // 생성일
+  updatedAt   DateTime     @updatedAt // 수정일
+  TravelNote  TravelNote[]
 }
