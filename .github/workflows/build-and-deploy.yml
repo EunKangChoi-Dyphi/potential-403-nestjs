@@ -28,7 +28,7 @@ jobs:
 #          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:${{ steps.current_time.outputs.time }}
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+#    needs: build
     steps:
       - name: Access to Remove Server
         uses: appleboy/ssh-action@master
