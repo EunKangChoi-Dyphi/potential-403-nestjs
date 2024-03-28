@@ -24,8 +24,8 @@ export class CitiesController {
   }
 
   @Get()
-  findAll(@Query('countryId') countryId?: number) {
-    return this.citiesService.findAll(countryId);
+  findAll(@Query('countryCode') countryCode?: string) {
+    return this.citiesService.findAll(countryCode);
   }
 
   @Put(':id')
