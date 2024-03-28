@@ -24,15 +24,9 @@ export class PrismaService
   }
 
   async onModuleInit() {
-    this.$on('error', (event) => {
-      this.logger.verbose(event.target);
-    });
     await this.$connect();
   }
 
   async enableShutdownHooks(app: INestApplication) {
-    this.$on('error', async () => {
-      await app.close();
-    });
   }
 }

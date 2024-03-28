@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.537.0",
+    "@js-joda/core": "^5.6.2",
+    "@js-joda/timezone": "^2.18.3",
     "@nestjs/cache-manager": "^2.2.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.0",
@@ -81,6 +83,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
   }
 }
