@@ -16,12 +16,27 @@ jobs:
           username: ${{ secrets.REMOTE_SERVER_USERNAME }}
           password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           script: |
-            echo ${{ secrets }} >> /app/test.txt
-#            docker rm -f $(docker ps -aq) >/dev/null 2>&1
-#            docker rmi -f $(docker images -q) >/dev/null 2>&1
-#            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
-#            docker run -d -p 80:10655 \
-#            -e NODE_ENV=production \
-#            -e SERVER_PORT=10655 \
-#            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-#            ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
+            echo "REMOTE_SERVER_HOST=${{ secrets.REMOTE_SERVER_HOST }}" >> /app/test.txt
+            echo "REMOTE_SERVER_PORT=${{ secrets.REMOTE_SERVER_PORT }}" >> /app/test.txt
+            echo "REMOTE_SERVER_USERNAME=${{ secrets.REMOTE_SERVER_USERNAME }}" >> /app/test.txt
+            echo "REMOTE_SERVER_PASSWORD=${{ secrets.REMOTE_SERVER_PASSWORD }}" >> /app/test.txt
+            echo "DB_USER=${{ secrets.DB_USER }}" >> /app/test.txt
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /app/test.txt
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> /app/test.txt
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> /app/test.txt
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> /app/test.txt
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> /app/test.txt
+            echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> /app/test.txt
+            echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> /app/test.txt
+            echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> /app/test.txt
+            echo "KAKAO_SECRET_KEY=${{ secrets.KAKAO_SECRET_KEY }}" >> /app/test.txt
+            echo "KAKAO_CALLBACK_URL=${{ secrets.KAKAO_CALLBACK_URL }}" >> /app/test.txt
+            echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> /app/test.txt
+            echo "APPLE_CLIENT_ID=TBD" >> /app/test.txt
+            echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> /app/test.txt
+            echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> /app/test.txt
+            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> /app/test.txt
+            echo "AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }}" >> /app/test.txt
+            echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> /app/test.txt
+            echo "JWT_ACCESS_TOKEN_EXPIRATION=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION }}" >> /app/test.txt
+            echo "JWT_ACCESS_TOKEN_EXPIRATION_TTL=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TTL }}" >> /app/test.txt
