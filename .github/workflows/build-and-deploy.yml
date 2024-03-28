@@ -64,4 +64,4 @@ jobs:
             -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
             -e JWT_ACCESS_TOKEN_EXPIRATION=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION }} \
             -e JWT_ACCESS_TOKEN_EXPIRATION_TTL=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TTL }} \
-            ${{ secrets.DOCKER_HUB_USERNAME }}/trazzle-api:20240328_0839
+            ${{ secrets.DOCKER_HUB_USERNAMES }}/trazzle-api:20240328_0839
