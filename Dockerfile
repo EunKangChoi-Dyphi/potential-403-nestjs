@@ -15,7 +15,6 @@ WORKDIR /app
 COPY /src/ /app/src/
 COPY /prisma /app//prisma/
 COPY /package*.json /tsconfig* /nest-cli.json /app/
-COPY /.env.production /app/.env
 
 # Install app dependencies
 RUN npm install
