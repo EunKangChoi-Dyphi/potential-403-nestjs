@@ -13,6 +13,7 @@ export class CountryRepositoryImpl implements CountryRepository {
   async create(dto: CreateCountryDto): Promise<CountryEntity> {
     return this.prismaService.country.create({
       data: {
+        code: dto.code,
         name: dto.name,
         continent: dto.continent,
       },
@@ -33,6 +34,7 @@ export class CountryRepositoryImpl implements CountryRepository {
     return this.prismaService.country.update({
       where: { id },
       data: {
+        code: dto.code,
         name: dto.name,
         continent: dto.continent,
       },

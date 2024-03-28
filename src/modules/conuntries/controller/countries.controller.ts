@@ -1,13 +1,12 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  Put,
+  Get,
+  Param,
   ParseIntPipe,
+  Post,
+  Put,
 } from '@nestjs/common';
 import { CountriesService } from '../service/countries.service';
 import { CreateCountryDto } from 'src/modules/conuntries/dtos/create-country.dto';
