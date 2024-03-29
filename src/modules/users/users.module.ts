@@ -7,9 +7,10 @@ import { UserProfileService } from './services/user-profiles.service';
 import { UsersRepository } from './repositories/users.interface';
 import { UsersRepositoryImpl } from './repositories/users.repository';
 import { CustomConfigModule } from 'src/modules/core/config/custom-config.module';
+import { AwsS3Module } from '../core/aws-s3/aws-s3.module';
 
 @Module({
-  imports: [PrismaModule, CustomConfigModule],
+  imports: [PrismaModule, CustomConfigModule, AwsS3Module],
   providers: [
     UsersService,
     UserProfileService,
