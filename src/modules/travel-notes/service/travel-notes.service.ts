@@ -34,6 +34,11 @@ export class TravelNotesService {
   async update(userId: number, id: number, dto: UpdateTravelNoteDto) {
     await this.findByUserIdOrElseThrow(id, userId);
     dto.validate();
+    if (dto.cityId) {
+      dto.cityName = null;
+    } else if (dto.cityName) {
+      dto.cityId = null;
+    }
     return await this.travelsRepository.update(id, dto);
   }
 

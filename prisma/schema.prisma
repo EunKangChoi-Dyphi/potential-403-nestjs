@@ -37,8 +37,9 @@ model TravelNote {
   createdAt DateTime @default(now()) // 생성일
   updatedAt DateTime @updatedAt // 수정일
 
-  city   City @relation(fields: [cityId], references: [id])
-  cityId Int
+  city     City?   @relation(fields: [cityId], references: [id])
+  cityId   Int?
+  cityName String?
 
   images TravelImage[]
   User   User?         @relation(fields: [userId], references: [id])
