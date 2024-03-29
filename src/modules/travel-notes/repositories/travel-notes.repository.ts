@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { TravelNotesRepository } from './travel-notes.interface';
-import { CreateTravelNoteDto } from '../dtos/req/create-travel-note.dto';
 import { TravelNoteEntity } from '../entities/travel-note.entity';
 import { PrismaService } from '../../core/database/prisma/prisma.service';
 import { UpdateTravelNoteDto } from 'src/modules/travel-notes/dtos/req/update-travel-note.dto';
@@ -35,11 +34,12 @@ export class TravelsRepositoryImpl implements TravelNotesRepository {
     id: number,
     dto: UpdateTravelNoteDto,
   ): Promise<TravelNoteEntity> {
-    return await this.prismaService.travelNote.update({
+    return this.prismaService.travelNote.update({
       where: { id },
       data: {
-        title: dto.title,
         cityId: dto.cityId,
+        cityName: dto.cityName,
+        title: dto.title,
         startDate: dto.startDate.toString(),
         endDate: dto.endDate.toString(),
         review: dto.review,
