@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { LocalDate } from '@js-joda/core';
 import { toLocalDate } from 'src/util/transform';
@@ -24,13 +24,26 @@ export class CreateTravelNoteDto {
   @IsOptional()
   review: string;
 
-  @IsNumber({}, { message: '도시 ID[cityId]는 숫자여야 합니다.' })
+  @IsOptional()
   cityId: number;
+
+  @IsOptional()
+  cityName: string;
 
   validate() {
     if (this.startDate.isAfter(this.endDate)) {
       throw new BadRequestException(
         '여행 시작일은 여행 종료일보다 빨라야 합니다.',
+      );
+    }
+    if (!this.cityId && !this.cityName) {
+      throw new BadRequestException(
+        '도시ID[cityId] 또는 도시 이름[cityName]이 필요 합니다.',
+      );
+    }
+    if (this.cityId && this.cityName) {
+      throw new BadRequestException(
+        '도시ID[cityId]와 도시 이름[cityName] 중 하나만 입력해야 합니다.',
       );
     }
   }

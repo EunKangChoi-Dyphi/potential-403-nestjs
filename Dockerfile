@@ -27,6 +27,8 @@ FROM node:${NODE_VERSION}-alpine
 
 WORKDIR /app
 
+ENV TZ=Asia/Seoul
+
 COPY --from=builder /app ./
 
 ## Expose the port that the application listens on.
