@@ -20,6 +20,7 @@ import {
   GOOGLE_OAUTH_CLIENT_TOKEN,
   JWK_CLIENT_TOKEN,
 } from '../constants/auth.constant';
+import { SignInOrSignUpRequestBodyDto } from 'src/modules/users/dtos/req/sign-in-sign-up-request-body.dto';
 
 @Injectable()
 export class AuthService {
@@ -74,13 +75,14 @@ export class AuthService {
     }
   }
 
-  async signInKakao(oauthToken: string) {
+  async signInKakao(dto: SignInOrSignUpRequestBodyDto) {
+    const { accessToken } = dto;
     try {
       // 받은 토큰으로 회원정보 갖고오기
       const userInfoKakao = await firstValueFrom(
         this.httpService.get(`https://kapi.kakao.com/v2/user/me`, {
           headers: {
-            Authorization: `Bearer ${oauthToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }),
       );
@@ -188,11 +190,12 @@ export class AuthService {
   }
   */
 
-  async signInGoogle(oauthToken: string) {
+  async signInGoogle(dto: SignInOrSignUpRequestBodyDto) {
+    const { accessToken } = dto;
     try {
       // todo
       const googleToken: TokenInfo =
-        await this.googleOAuthClient.getTokenInfo(oauthToken);
+        await this.googleOAuthClient.getTokenInfo(accessToken);
 
       const account = `${OAuthSocialLoginType.Google}-${googleToken.aud}`;
 
@@ -219,10 +222,11 @@ export class AuthService {
     }
   }
 
-  async signInApple(oauthToken: string) {
+  async signInApple(dto: SignInOrSignUpRequestBodyDto) {
+    const { accessToken } = dto;
     try {
       // jwt 토큰 디코드
-      const decodedJWT: Jwt | null = jwt.decode(oauthToken, {
+      const decodedJWT: Jwt | null = jwt.decode(accessToken, {
         complete: true,
       });
 
@@ -237,7 +241,7 @@ export class AuthService {
 
       const appleSignedKey: string = applePublicKey.getPublicKey();
 
-      const { payload }: JwtPayload = jwt.verify(oauthToken, appleSignedKey, {
+      const { payload }: JwtPayload = jwt.verify(accessToken, appleSignedKey, {
         complete: true,
       });
 

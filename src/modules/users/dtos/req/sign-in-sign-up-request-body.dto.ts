@@ -7,7 +7,7 @@ export class SignInOrSignUpRequestBodyDto {
     description: 'OAuth Access Token',
   })
   @IsString()
-  oauthToken: string;
+  accessToken: string;
 
   @ApiProperty({
     description: '소셜/로그인타입 - 카카오: k, 구글: g, 애플: a',
