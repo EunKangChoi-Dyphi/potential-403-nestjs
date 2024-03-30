@@ -21,11 +21,12 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
-  ApiOperation,
+  ApiOperation, ApiTags,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SignInOrSignUpRequestBodyDto } from '../dtos/req/sign-in-sign-up-request-body.dto';
 
+@ApiTags('사용자 & 로그인')
 @Controller()
 export class UsersController {
   constructor(
@@ -101,6 +102,7 @@ export class UsersController {
     return access_token;
   }
 
+  @ApiTags('로그인 (테스트용)')
   @Post('sign-in/account')
   async signInAccount(@Query('account') account: string) {
     return this.authService.signInAccount(account);
