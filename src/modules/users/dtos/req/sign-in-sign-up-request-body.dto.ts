@@ -19,6 +19,13 @@ export class SignInOrSignUpRequestBodyDto {
 
 export class SignInOrSignUpKakaoRequestBodyDto extends SignInOrSignUpRequestBodyDto {
   @ApiProperty({
+    description: "OAuth Access Token",
+    example: "{{카카오 액세스토큰}}",
+  })
+  @IsString()
+  accessToken: string;
+
+  @ApiProperty({
     description: "소셜/로그인타입 - 카카오: k",
     example: "k",
     enum: OAuthSocialLoginType,
@@ -28,6 +35,13 @@ export class SignInOrSignUpKakaoRequestBodyDto extends SignInOrSignUpRequestBody
 
 export class SignInOrSignUpAppleRequestBodyDto extends SignInOrSignUpRequestBodyDto {
   @ApiProperty({
+    description: "OAuth Access Token",
+    example: "{{애플 액세스토큰}}",
+  })
+  @IsString()
+  accessToken: string;
+
+  @ApiProperty({
     description: "소셜/로그인타입 - 애플: a",
     example: "a",
     enum: OAuthSocialLoginType,
@@ -36,6 +50,13 @@ export class SignInOrSignUpAppleRequestBodyDto extends SignInOrSignUpRequestBody
 }
 
 export class SignInOrSignUpGoogleRequestBodyDto extends SignInOrSignUpRequestBodyDto {
+  @ApiProperty({
+    description: "OAuth Access Token",
+    example: "{{구글 액세스토큰}}",
+  })
+  @IsString()
+  accessToken: string;
+
   @ApiProperty({
     description: "소셜/로그인타입 - 구글: g",
     example: "g",
