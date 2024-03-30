@@ -1,25 +1,14 @@
-import { Module } from '@nestjs/common';
-import { UsersService } from './services/users.service';
-import { UsersController } from './controllers/users.controller';
-import { PrismaModule } from '../core/database/prisma/prisma.module';
-import { UserProfilesController } from './controllers/user-profiles.controller';
-import { UserProfileService } from './services/user-profiles.service';
-import { UsersRepository } from './repositories/users.interface';
-import { UsersRepositoryImpl } from './repositories/users.repository';
-import { CustomConfigModule } from 'src/modules/core/config/custom-config.module';
-import { AwsS3Module } from '../core/aws-s3/aws-s3.module';
+import { Module } from "@nestjs/common";
+import { UsersService } from "./services/users.service";
+import { UsersController } from "./controllers/users.controller";
+import { PrismaModule } from "../core/database/prisma/prisma.module";
+import { CustomConfigModule } from "src/modules/core/config/custom-config.module";
+import { AwsS3Module } from "../core/aws-s3/aws-s3.module";
 
 @Module({
   imports: [PrismaModule, CustomConfigModule, AwsS3Module],
-  providers: [
-    UsersService,
-    UserProfileService,
-    {
-      provide: UsersRepository,
-      useClass: UsersRepositoryImpl,
-    },
-  ],
-  controllers: [UsersController, UserProfilesController],
+  providers: [UsersService],
+  controllers: [UsersController],
   exports: [UsersService],
 })
 export class UsersModule {}

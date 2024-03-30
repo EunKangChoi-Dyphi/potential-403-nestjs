@@ -1,18 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { CustomConfigService } from '../config/custom-config.service';
+import { Injectable } from "@nestjs/common";
+import { CustomConfigService } from "../config/custom-config.service";
 import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
   DeleteObjectCommand,
-} from '@aws-sdk/client-s3';
+} from "@aws-sdk/client-s3";
 import {
   deleteObjectCommandDto,
   getObjectCommandDto,
   putObjectCommandDto,
-} from './dtos/s3-command.dto';
-import ENV_KEY from '../config/constants/env-config.constant';
-import { Readable } from 'stream';
+} from "./dtos/s3-command.dto";
+import ENV_KEY from "../config/constants/env-config.constant";
+import { Readable } from "stream";
 
 @Injectable()
 export class AwsS3Service {
@@ -22,22 +22,26 @@ export class AwsS3Service {
   private readonly NODE_MODE;
 
   constructor(private customConfigService: CustomConfigService) {
-    this.NODE_MODE =
-      this.customConfigService.get(ENV_KEY.NODE_ENV) ?? 'development';
+    this.NODE_MODE = this.customConfigService.get(ENV_KEY.NODE_ENV) ?? "development";
     this.AWS_REGION = this.customConfigService.get(ENV_KEY.AWS_REGION);
-    this.AWS_S3_BUCKET_NAME = this.customConfigService.get(
-      ENV_KEY.AWS_S3_BUCKET_NAME,
-    );
+    this.AWS_S3_BUCKET_NAME = this.customConfigService.get(ENV_KEY.AWS_S3_BUCKET_NAME);
 
     this.s3Client = new S3Client({
       region: this.AWS_REGION,
       credentials: {
         accessKeyId: this.customConfigService.get(ENV_KEY.AWS_ACCESS_KEY),
-        secretAccessKey: this.customConfigService.get(
-          ENV_KEY.AWS_SECRET_ACCESS_KEY,
-        ),
+        secretAccessKey: this.customConfigService.get(ENV_KEY.AWS_SECRET_ACCESS_KEY),
       },
     });
+  }
+
+  publishS3URL(Key: string) {
+    /**
+     * 1) 이미지 프로필 변경
+     * Key: profiles/{user-id}/{new-profile-image-file-name}
+     */
+    const url = `https://${this.AWS_S3_BUCKET_NAME}.s3.${this.AWS_REGION}.amazonaws.com/${this.NODE_MODE}/${Key}`;
+    return url;
   }
 
   async uploadImageToS3Bucket(dto: putObjectCommandDto) {
@@ -65,7 +69,7 @@ export class AwsS3Service {
     });
 
     await this.s3Client.send(getObjectCommand);
-    return `https://s3.${this.AWS_REGION}.amazonaws.com/${this.AWS_S3_BUCKET_NAME}/${this.NODE_MODE}/${dto.Key}`;
+    return this.publishS3URL(dto.Key);
   }
 
   async deleteImageFromS3Bucket(dto: deleteObjectCommandDto) {
