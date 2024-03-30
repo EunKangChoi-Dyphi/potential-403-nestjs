@@ -18,7 +18,18 @@ export class CitiesService {
 
   findAll(searchCityDto: SearchCityDto) {
     return this.prismaService.city.findMany({
-      where: { ...searchCityDto },
+      where: {
+        AND: [
+          {
+            name: {
+              contains: searchCityDto.name,
+            },
+          },
+          {
+            countryCode: searchCityDto.countryCode,
+          },
+        ],
+      },
     });
   }
 
