@@ -1,13 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTravelNoteDto } from '../dtos/req/create-travel-note.dto';
-import { UpdateTravelNoteDto } from 'src/modules/travel-notes/dtos/req/update-travel-note.dto';
-import { AwsS3Service } from 'src/modules/core/aws-s3/aws-s3.service';
-import { v4 as uuidv4 } from 'uuid';
-import { TravelImageEntity } from 'src/modules/travel-notes/entities/travel-image.entity';
-import { PrismaService } from 'src/modules/core/database/prisma/prisma.service';
-import { putObjectCommandDto } from 'src/modules/core/aws-s3/dtos/s3-command.dto';
-import { Prisma } from '@prisma/client';
-
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { CreateTravelNoteDto } from "../dtos/req/create-travel-note.dto";
+import { UpdateTravelNoteDto } from "src/modules/travel-notes/dtos/req/update-travel-note.dto";
+import { AwsS3Service } from "src/modules/core/aws-s3/aws-s3.service";
+import { v4 as uuidv4 } from "uuid";
+import { TravelImageEntity } from "src/modules/travel-notes/entities/travel-image.entity";
+import { PrismaService } from "src/modules/core/database/prisma/prisma.service";
+import { putObjectCommandDto } from "src/modules/core/aws-s3/dtos/s3-command.dto";
+import { Prisma } from "@prisma/client";
 
 const select: Prisma.TravelNoteSelect = {
   id: true,
@@ -37,17 +36,17 @@ const select: Prisma.TravelNoteSelect = {
 export class TravelNotesService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly awsS3Service: AwsS3Service,
+    private readonly awsS3Service: AwsS3Service
   ) {}
 
   async create(
     userId: number,
     dto: CreateTravelNoteDto,
-    images: { sequence: number; file: Express.Multer.File }[],
+    images: { sequence: number; file: Express.Multer.File }[]
   ) {
     dto.validate();
 
-    return this.prismaService.$transaction(async transaction => {
+    return this.prismaService.$transaction(async (transaction) => {
       const travelNote = await transaction.travelNote.create({
         data: {
           userId,
@@ -62,9 +61,7 @@ export class TravelNotesService {
 
       if (images.length > 0) {
         // 메인 이미지 인덱스
-        const mainImageIndex = images.some(
-          (image) => image.sequence === dto.mainImageIndex,
-        )
+        const mainImageIndex = images.some((image) => image.sequence === dto.mainImageIndex)
           ? dto.mainImageIndex
           : 1;
 
@@ -93,7 +90,7 @@ export class TravelNotesService {
 
         return transaction.travelNote.findFirst({
           where: { id: travelNote.id },
-          select
+          select,
         });
       }
     });
@@ -102,32 +99,31 @@ export class TravelNotesService {
   list(userId: number) {
     return this.prismaService.travelNote.findMany({
       where: { userId },
-      select
+      select,
     });
   }
 
   delete(userId: number, id: number) {
-    return this.prismaService.$transaction(async transaction => {
+    return this.prismaService.$transaction(async (transaction) => {
       const travelNote = await transaction.travelNote.findUnique({
         where: { id, userId },
         include: { images: true },
       });
 
       if (!travelNote) {
-        throw new NotFoundException('존재 하지 않는 여행 일지 입니다.');
+        throw new NotFoundException("존재 하지 않는 여행 일지 입니다.");
       }
 
       // 이미지 삭제
       await Promise.all(
         travelNote.images.map((image) =>
-          this.awsS3Service.deleteImageFromS3Bucket({ Key: image.key }),
-        ),
+          this.awsS3Service.deleteImageFromS3Bucket({ Key: image.key })
+        )
       );
 
       await transaction.travelNote.delete({
         where: { id },
       });
-
     });
   }
 
@@ -135,20 +131,18 @@ export class TravelNotesService {
     userId: number,
     travelNoteId: number,
     dto: UpdateTravelNoteDto,
-    images: { sequence: number; file: Express.Multer.File }[],
+    images: { sequence: number; file: Express.Multer.File }[]
   ) {
-
     dto.validate();
 
-    return this.prismaService.$transaction(async transaction => {
-
+    return this.prismaService.$transaction(async (transaction) => {
       const travelNote = await transaction.travelNote.findUnique({
         where: { id: travelNoteId, userId },
         include: { images: true },
       });
 
       if (!travelNote) {
-        throw new NotFoundException('존재 하지 않는 여행 일지 입니다.');
+        throw new NotFoundException("존재 하지 않는 여행 일지 입니다.");
       }
 
       await transaction.travelNote.update({
@@ -173,20 +167,20 @@ export class TravelNotesService {
       //
 
       // 기존 이미지 삭제
-      const newImageSequences = images.map(image => image.sequence);
+      const newImageSequences = images.map((image) => image.sequence);
       await Promise.all(
         // 기존 이미지 중에 새로 입력한 이미지의 자리 확인
-        travelNote.images.filter(it => newImageSequences.includes(it.sequence))
-          .map(async deletedImage => {
+        travelNote.images
+          .filter((it) => newImageSequences.includes(it.sequence))
+          .map(async (deletedImage) => {
             // S3에서 이미지 삭제
             await this.awsS3Service.deleteImageFromS3Bucket({ Key: deletedImage.key });
             // 이미지 삭제
             await transaction.travelImage.delete({
-              where: { id: deletedImage.id }
+              where: { id: deletedImage.id },
             });
           })
       );
-
 
       if (images.length > 0) {
         for (const image of images) {
@@ -226,7 +220,11 @@ export class TravelNotesService {
         }
       }
     });
-
   }
 
+  getOne(id: number) {
+    return this.prismaService.travelNote.findFirst({
+      where: { id: id },
+    });
+  }
 }
