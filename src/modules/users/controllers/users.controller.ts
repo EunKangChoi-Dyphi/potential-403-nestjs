@@ -20,6 +20,7 @@ import { CustomConfigService } from "src/modules/core/config/custom-config.servi
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { SignInOrSignUpRequestBodyDto } from "../dtos/req/sign-in-sign-up-request-body.dto";
+import { BearerAuth } from "src/decorators/bearer-auth.decorator";
 
 @ApiTags("사용자 & 로그인")
 @Controller()
@@ -41,6 +42,10 @@ export class UsersController {
   }
 
   // 회원탈퇴
+  @BearerAuth(JwtAuthGuard)
+  @ApiOperation({
+    summary: "회원탈퇴",
+  })
   @UseGuards(JwtAuthGuard)
   @Delete()
   async withdrawUser(@SignInUser() user: UserEntity) {
@@ -56,21 +61,27 @@ export class UsersController {
   }
 
   // 소셜로그인
-  @ApiTags("소셜로그인 카카오")
+  @ApiOperation({
+    summary: "카카오 연동 로그인",
+  })
   @Post("sign-in/kakao")
   async signInKakao(@Body() body: SignInOrSignUpRequestBodyDto) {
     const loginUserInfo = await this.authService.signInKakao(body);
     return loginUserInfo;
   }
 
-  @ApiTags("소셜로그인 애플")
+  @ApiOperation({
+    summary: "애플 연동 로그인",
+  })
   @Post("sign-in/apple")
   async signInApple(@Body() body: SignInOrSignUpRequestBodyDto) {
     const loginUserInfo = await this.authService.signInApple(body);
     return loginUserInfo;
   }
 
-  @ApiTags("소셜로그인 구글")
+  @ApiOperation({
+    summary: "구글 연동 로그인",
+  })
   @Post("sign-in/google")
   async signInGoogle(@Body() body: SignInOrSignUpRequestBodyDto) {
     const loginUserInfo = await this.authService.signInGoogle(body);

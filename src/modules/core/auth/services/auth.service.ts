@@ -116,6 +116,7 @@ export class AuthService {
         name: user.name,
         account: user.account,
         profileImageURL: user.profileImageURL,
+        intro: user.intro,
         access_token: access_token,
       };
     } catch (e) {
@@ -155,6 +156,7 @@ export class AuthService {
         name: user.name,
         account: user.account,
         profileImageURL: user.profileImageURL,
+        intro: user.intro,
         access_token: access_token,
       };
     } catch (e) {
@@ -214,6 +216,7 @@ export class AuthService {
         name: user.name,
         account: user.account,
         profileImageURL: user.profileImageURL,
+        intro: user.intro,
         access_token: access_token,
       };
     } catch (e) {
@@ -238,6 +241,7 @@ export class AuthService {
       name: user.name,
       account: user.account,
       profileImageURL: user.profileImageURL,
+      intro: user.intro,
       access_token: access_token,
     };
   }

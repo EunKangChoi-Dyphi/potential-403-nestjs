@@ -4,4 +4,5 @@ export class SocialLoginResponseDto {
   name: string;
   account: string;
   profileImageURL: string | null;
+  intro: string | null;
 }
