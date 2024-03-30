@@ -17,10 +17,23 @@ import { UserEntity } from "../entities/user.entity";
 import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { AuthService } from "src/modules/core/auth/services/auth.service";
 import { CustomConfigService } from "src/modules/core/config/custom-config.service";
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from "@nestjs/swagger";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { SignInOrSignUpRequestBodyDto } from "../dtos/req/sign-in-sign-up-request-body.dto";
+import {
+  SignInOrSignUpAppleRequestBodyDto,
+  SignInOrSignUpGoogleRequestBodyDto,
+  SignInOrSignUpKakaoRequestBodyDto,
+  SignInOrSignUpRequestBodyDto,
+} from "../dtos/req/sign-in-sign-up-request-body.dto";
 import { BearerAuth } from "src/decorators/bearer-auth.decorator";
+import { SocialLoginResponseDto } from "../dtos/res/social-login-response.dto";
 
 @ApiTags("사용자 & 로그인")
 @Controller()
@@ -33,6 +46,8 @@ export class UsersController {
 
   // 로그인한 회원정보 조회
   @ApiOperation({ summary: "로그인한 회원의 정보 조회" })
+  @BearerAuth(JwtAuthGuard)
+  @ApiOkResponse({ description: "현재 로그인 유저정보", type: UserEntity })
   @UseGuards(JwtAuthGuard)
   @Get()
   async myProfile(
@@ -46,6 +61,7 @@ export class UsersController {
   @ApiOperation({
     summary: "회원탈퇴",
   })
+  @ApiOkResponse({ description: "탈퇴한 유저정보", type: UserEntity })
   @UseGuards(JwtAuthGuard)
   @Delete()
   async withdrawUser(@SignInUser() user: UserEntity) {
@@ -54,6 +70,8 @@ export class UsersController {
   }
 
   // 로그아웃
+  @BearerAuth(JwtAuthGuard)
+  @ApiOkResponse({ description: "액세스 토큰 삭제" })
   @UseGuards(JwtAuthGuard)
   @Get("sign-out")
   async signOut(@SignInUser() user: UserEntity) {
@@ -64,8 +82,9 @@ export class UsersController {
   @ApiOperation({
     summary: "카카오 연동 로그인",
   })
+  @ApiOkResponse({ description: "카카오 연동 로그인 유저정보", type: SocialLoginResponseDto })
   @Post("sign-in/kakao")
-  async signInKakao(@Body() body: SignInOrSignUpRequestBodyDto) {
+  async signInKakao(@Body() body: SignInOrSignUpKakaoRequestBodyDto) {
     const loginUserInfo = await this.authService.signInKakao(body);
     return loginUserInfo;
   }
@@ -73,8 +92,12 @@ export class UsersController {
   @ApiOperation({
     summary: "애플 연동 로그인",
   })
+  @ApiOkResponse({
+    description: "애플 연동 로그인 유저정보",
+    type: SignInOrSignUpAppleRequestBodyDto,
+  })
   @Post("sign-in/apple")
-  async signInApple(@Body() body: SignInOrSignUpRequestBodyDto) {
+  async signInApple(@Body() body: SignInOrSignUpAppleRequestBodyDto) {
     const loginUserInfo = await this.authService.signInApple(body);
     return loginUserInfo;
   }
@@ -82,8 +105,9 @@ export class UsersController {
   @ApiOperation({
     summary: "구글 연동 로그인",
   })
+  @ApiOkResponse({ description: "구글 연동 로그인 유저정보", type: SocialLoginResponseDto })
   @Post("sign-in/google")
-  async signInGoogle(@Body() body: SignInOrSignUpRequestBodyDto) {
+  async signInGoogle(@Body() body: SignInOrSignUpGoogleRequestBodyDto) {
     const loginUserInfo = await this.authService.signInGoogle(body);
     return loginUserInfo;
   }
