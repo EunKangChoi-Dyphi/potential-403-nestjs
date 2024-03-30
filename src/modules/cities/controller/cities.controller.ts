@@ -14,16 +14,20 @@ import { CitiesService } from "../service/cities.service";
 import { CreateCityDto } from "../dto/create-city.dto";
 import { UpdateCityDto } from "../dto/update-city.dto";
 import { SearchCityDto } from "../dto/search-city.dto";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("City")
 @Controller()
 export class CitiesController {
   constructor(private readonly citiesService: CitiesService) {}
 
+  @ApiOperation({ summary: "도시 등록" })
   @Post()
   create(@Body() createCityDto: CreateCityDto) {
     return this.citiesService.create(createCityDto);
   }
 
+  @ApiOperation({ summary: "도시검색" })
   @Get()
   findAll(@Query() query: SearchCityDto) {
     return this.citiesService.findAll(query);

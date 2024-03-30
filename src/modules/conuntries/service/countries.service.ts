@@ -1,8 +1,9 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Query } from "@nestjs/common";
 import { CreateCountryDto } from "src/modules/conuntries/dtos/create-country.dto";
 import { UpdateCountryDto } from "src/modules/conuntries/dtos/update-country.dto";
 import { PrismaService } from "src/modules/core/database/prisma/prisma.service";
 import { CountryEntity } from "../entities/country.entity";
+import { SearchCountryDto } from "../dtos/search-country.dto";
 
 @Injectable()
 export class CountriesService {
@@ -18,8 +19,12 @@ export class CountriesService {
     });
   }
 
-  findAll(): Promise<CountryEntity[]> {
-    return this.prismaService.country.findMany();
+  findAll(dto: SearchCountryDto): Promise<CountryEntity[]> {
+    return this.prismaService.country.findMany({
+      where: {
+        ...dto,
+      },
+    });
   }
 
   update(code: string, dto: UpdateCountryDto): Promise<CountryEntity> {

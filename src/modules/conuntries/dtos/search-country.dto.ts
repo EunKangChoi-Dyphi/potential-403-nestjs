@@ -1,23 +1,22 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
 import { IsOptional, IsString } from "class-validator";
 
-export class SearchCityDto {
+export class SearchCountryDto {
   @ApiProperty({
     required: false,
-    description: "국가코드",
-    example: "KR",
-  })
-  @IsOptional()
-  @IsString()
-  countryCode?: string;
-
-  @ApiProperty({
-    required: false,
-    description: "도시이름",
-    example: "Seoul",
+    description: "국가이름",
+    example: "Afghanistan",
   })
   @IsOptional()
   @IsString()
   name?: string;
+
+  @ApiProperty({
+    required: false,
+    description: "대륙이름",
+    example: "Asia",
+  })
+  @IsOptional()
+  @IsString()
+  continent?: string;
 }
