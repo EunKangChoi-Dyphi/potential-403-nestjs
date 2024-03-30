@@ -120,6 +120,9 @@ export class UsersController {
 
   // 회원정보 수정 - TBD : name / intro / profile 수정
   @ApiConsumes("multipart/form")
+  @BearerAuth(JwtAuthGuard)
+  @ApiOperation({ summary: "유저정보 수정" })
+  @ApiOkResponse({ description: "유저명 / 프로필이미지 / 소개글 수정", type: UserEntity })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor("file"))
   @ApiBody({

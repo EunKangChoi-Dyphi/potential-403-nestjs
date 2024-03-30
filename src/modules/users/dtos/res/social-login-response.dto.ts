@@ -32,7 +32,7 @@ export class SocialLoginResponseDto {
   profileImageURL: string | null;
 
   @ApiProperty({
-    description: "유저 소개문구",
+    description: "소개글",
     example: "Let's Trazzle!",
   })
   intro: string | null;
