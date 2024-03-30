@@ -22,12 +22,12 @@ export class SocialLoginResponseDto {
 
   @ApiProperty({
     description: "소셜연동 유저 계정 고유값(k :카카오/ g: 구글 / a : 애플)",
-    examples: ["k-12345", "g-12345", "a-12345"],
+    example: "k-12345",
   })
   account: string;
 
   @ApiProperty({
-    description: "프로필 이미지 URL",
+    description: "{{프로필 이미지 S3 URL}}",
   })
   profileImageURL: string | null;
 
