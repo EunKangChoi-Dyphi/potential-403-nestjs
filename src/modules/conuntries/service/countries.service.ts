@@ -22,7 +22,16 @@ export class CountriesService {
   findAll(dto: SearchCountryDto): Promise<CountryEntity[]> {
     return this.prismaService.country.findMany({
       where: {
-        ...dto,
+        OR: [
+          {
+            name: {
+              startsWith: dto.name,
+            },
+          },
+          {
+            continent: dto.continent,
+          },
+        ],
       },
     });
   }

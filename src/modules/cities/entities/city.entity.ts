@@ -19,6 +19,8 @@ export class CityEntity implements City {
   })
   countryCode: string;
 
+  latitude: string | null;
+  longitude: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
