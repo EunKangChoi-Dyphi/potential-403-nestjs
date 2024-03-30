@@ -30,7 +30,7 @@ export class UsersService {
     return newUser;
   }
 
-  async updateUser(dto: UpdateUserRequestBodyDto) {
+  async updateUser(dto: UpdateUserDto) {
     const { id, name, intro, profileImageFile } = dto;
 
     this.prismaService.$transaction(async (transaction) => {
@@ -70,6 +70,8 @@ export class UsersService {
           // 4-2. s3에 새로운 프로필이미지로 업데이트한다.
           await this.awsS3Service.uploadImageToS3Bucket({
             Key: `profiles/${id}/${profileImageFile.originalname}`,
+            Body: profileImageFile.buffer,
+            ContentType: profileImageFile.mimetype,
           });
         }
       }

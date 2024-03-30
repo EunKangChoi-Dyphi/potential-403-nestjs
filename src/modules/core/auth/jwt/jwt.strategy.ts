@@ -1,23 +1,19 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
-import { User } from '@prisma/client';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import ENV_KEY from 'src/modules/core/config/constants/env-config.constant';
-import { CustomConfigService } from 'src/modules/core/config/custom-config.service';
-import { PrismaService } from 'src/modules/core/database/prisma/prisma.service';
-import { RedisService } from 'src/modules/core/redis/redis.service';
-import JwtPayload from './trazzle-jwt.payload';
+import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { PassportStrategy } from "@nestjs/passport";
+import { User } from "@prisma/client";
+import { ExtractJwt, Strategy } from "passport-jwt";
+import ENV_KEY from "src/modules/core/config/constants/env-config.constant";
+import { CustomConfigService } from "src/modules/core/config/custom-config.service";
+import { PrismaService } from "src/modules/core/database/prisma/prisma.service";
+import { RedisService } from "src/modules/core/redis/redis.service";
+import JwtPayload from "./trazzle-jwt.payload";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly customConfigService: CustomConfigService,
     private readonly prismaService: PrismaService,
-    private readonly redisService: RedisService,
+    private readonly redisService: RedisService
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -33,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       const tokenFromRedis = await this.redisService.get(`user-${userId}`);
 
       if (!tokenFromRedis) {
-        throw new UnauthorizedException('토큰이 만료하였습니다.');
+        throw new UnauthorizedException("토큰이 만료하였습니다.");
       }
 
       const user: User | null = await this.prismaService.user.findFirst({
@@ -43,7 +39,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       });
 
       if (!user) {
-        throw new NotFoundException('존재하지 않은 유저입니다.');
+        throw new NotFoundException("존재하지 않은 유저입니다.");
       }
 
       return user;
