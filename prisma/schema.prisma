@@ -48,12 +48,14 @@ model TravelNote {
 
 // 여행 이미지
 model TravelImage {
-  id        Int      @id @default(autoincrement()) // PK
-  url       String // 이미지 URL
-  createdAt DateTime @default(now()) // 생성일
-
-  travel   TravelNote @relation(fields: [travelId], references: [id])
-  travelId Int // 참조키
+  id           Int        @id @default(autoincrement()) // PK
+  sequence     Int // 이미지 순서
+  isMain       Boolean    @default(false) // 대표 이미지 여부
+  url          String // 이미지 URL
+  key          String? // 이미지 Key
+  createdAt    DateTime   @default(now()) // 생성일
+  travel       TravelNote @relation(fields: [travelNoteId], references: [id], onDelete: Cascade)
+  travelNoteId Int // 참조키
 }
 
 model Country {
