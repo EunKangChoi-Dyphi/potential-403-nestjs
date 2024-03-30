@@ -8,6 +8,7 @@ export const BearerAuth = (guard: any = JwtAuthGuard) => {
     ApiBearerAuth(),
     ApiHeader({
       name: "accessToken",
+      required: true,
       description: "Trazzle Access Token (Sign-In Required)",
       example:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImFjY291bnQiOiJrLWNobGRtc3JrZCIsImlhdCI6MTcxMTc5MTU2MCwiZXhwIjoxNzExODc3OTYwfQ.qNeh3LJTjMsNitv8wU76EdqjRzScyQdZfWodm1SPcSM",
