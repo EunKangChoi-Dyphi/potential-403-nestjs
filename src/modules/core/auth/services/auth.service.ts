@@ -238,7 +238,7 @@ export class AuthService {
       name: user.name,
       account: user.account,
       profileImageURL: user.profileImageURL,
-      ...access_token,
+      access_token: access_token,
     };
   }
 }
