@@ -8,7 +8,7 @@ module.exports = {
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
+    // 'plugin:prettier/recommended',
   ],
   root: true,
   env: {
@@ -21,5 +21,10 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    'semi': ['error', 'always'], // 세미콜론을 항상 사용하도록 설정
+    'quotes': ['error', 'single'], // 싱글 쿼트를 사용하도록 설정
+
+
   },
 };

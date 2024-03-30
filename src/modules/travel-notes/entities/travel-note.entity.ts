@@ -1,6 +1,5 @@
 import { TravelNote } from '@prisma/client';
 import { CreateTravelNoteDto } from 'src/modules/travel-notes/dtos/req/create-travel-note.dto';
-import { BadRequestException } from '@nestjs/common';
 
 export class TravelNoteEntity implements TravelNote {
   id: number;
