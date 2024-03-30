@@ -12,6 +12,7 @@ import {
   putObjectCommandDto,
 } from './dtos/s3-command.dto';
 import ENV_KEY from '../config/constants/env-config.constant';
+import { Readable } from 'stream';
 
 @Injectable()
 export class AwsS3Service {
@@ -40,14 +41,21 @@ export class AwsS3Service {
   }
 
   async uploadImageToS3Bucket(dto: putObjectCommandDto) {
+    const Key = `${this.NODE_MODE}/${dto.Key}`;
+
     // 이미지 1개 업로드
     const putObjectCommand = new PutObjectCommand({
       Bucket: this.AWS_S3_BUCKET_NAME,
-      ...dto,
+      Key: Key,
+      Body: dto.Body,
+      ContentType: dto.ContentType,
     });
 
     await this.s3Client.send(putObjectCommand);
-    return `https://s3.${this.AWS_REGION}.amazonaws.com/${this.AWS_S3_BUCKET_NAME}/${this.NODE_MODE}/${dto.Key}`;
+    return {
+      Key: Key,
+      url: `https://${this.AWS_S3_BUCKET_NAME}.s3.${this.AWS_REGION}.amazonaws.com/${Key}`,
+    };
   }
 
   async getImageUrlFromS3Bucket(dto: getObjectCommandDto) {
