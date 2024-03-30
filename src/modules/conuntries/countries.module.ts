@@ -1,19 +1,11 @@
-import { Module } from '@nestjs/common';
-import { CountriesService } from './service/countries.service';
-import { CountriesController } from './controller/countries.controller';
-import { PrismaModule } from 'src/modules/core/database/prisma/prisma.module';
-import { CountryRepository } from 'src/modules/conuntries/repositories/country.interface';
-import { CountryRepositoryImpl } from 'src/modules/conuntries/repositories/country.repository';
+import { Module } from "@nestjs/common";
+import { CountriesService } from "./service/countries.service";
+import { CountriesController } from "./controller/countries.controller";
+import { PrismaModule } from "src/modules/core/database/prisma/prisma.module";
 
 @Module({
   imports: [PrismaModule],
-  providers: [
-    CountriesService,
-    {
-      provide: CountryRepository,
-      useClass: CountryRepositoryImpl,
-    },
-  ],
+  providers: [CountriesService],
   controllers: [CountriesController],
   exports: [CountriesService],
 })

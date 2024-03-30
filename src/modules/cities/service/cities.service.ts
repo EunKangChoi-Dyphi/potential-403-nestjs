@@ -1,26 +1,39 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateCityDto } from '../dto/create-city.dto';
-import { UpdateCityDto } from '../dto/update-city.dto';
-import { CityRepository } from 'src/modules/cities/repositories/city.interface';
+import { Inject, Injectable } from "@nestjs/common";
+import { CreateCityDto } from "../dto/create-city.dto";
+import { UpdateCityDto } from "../dto/update-city.dto";
+import { SearchCityDto } from "../dto/search-city.dto";
+import { PrismaService } from "src/modules/core/database/prisma/prisma.service";
 
 @Injectable()
 export class CitiesService {
-  constructor(
-    @Inject(CityRepository) private readonly cityRepository: CityRepository,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
   create(createCityDto: CreateCityDto) {
-    return this.cityRepository.create(createCityDto);
+    return this.prismaService.city.create({
+      data: {
+        name: createCityDto.name,
+        countryCode: createCityDto.countryCode,
+      },
+    });
   }
 
-  findAll(countryCode?: string) {
-    return this.cityRepository.findMany(countryCode);
+  findAll(searchCityDto: SearchCityDto) {
+    return this.prismaService.city.findMany({
+      where: { ...searchCityDto },
+    });
   }
 
   update(id: number, updateCityDto: UpdateCityDto) {
-    return this.cityRepository.update(id, updateCityDto);
+    return this.prismaService.city.update({
+      where: { id },
+      data: {
+        ...updateCityDto,
+      },
+    });
   }
 
   delete(id: number) {
-    return this.cityRepository.delete(id);
+    return this.prismaService.city.delete({
+      where: { id },
+    });
   }
 }
