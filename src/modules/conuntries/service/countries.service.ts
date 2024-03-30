@@ -4,6 +4,7 @@ import { UpdateCountryDto } from "src/modules/conuntries/dtos/update-country.dto
 import { PrismaService } from "src/modules/core/database/prisma/prisma.service";
 import { CountryEntity } from "../entities/country.entity";
 import { SearchCountryDto } from "../dtos/search-country.dto";
+import { TAKE_20_PER_PAGE } from "src/commons/constants/pagination.constant";
 
 @Injectable()
 export class CountriesService {
@@ -21,6 +22,8 @@ export class CountriesService {
 
   findAll(dto: SearchCountryDto): Promise<CountryEntity[]> {
     return this.prismaService.country.findMany({
+      take: TAKE_20_PER_PAGE,
+      skip: 1,
       where: {
         OR: [
           {
@@ -32,6 +35,9 @@ export class CountriesService {
             continent: dto.continent,
           },
         ],
+      },
+      orderBy: {
+        name: "asc",
       },
     });
   }
