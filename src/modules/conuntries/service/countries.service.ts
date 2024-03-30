@@ -25,7 +25,7 @@ export class CountriesService {
         OR: [
           {
             name: {
-              startsWith: dto.name,
+              contains: dto.name,
             },
           },
           {
