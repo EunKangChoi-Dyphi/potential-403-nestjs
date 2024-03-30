@@ -13,6 +13,7 @@ import { OAuth2Client, TokenInfo } from "google-auth-library";
 import { GOOGLE_OAUTH_CLIENT_TOKEN, JWK_CLIENT_TOKEN } from "../constants/auth.constant";
 import { SignInOrSignUpRequestBodyDto } from "src/modules/users/dtos/req/sign-in-sign-up-request-body.dto";
 import { PrismaService } from "../../database/prisma/prisma.service";
+import { SocialLoginResponseDto } from "src/modules/users/dtos/res/social-login-response.dto";
 
 @Injectable()
 export class AuthService {
@@ -59,9 +60,7 @@ export class AuthService {
         this.JWT_ACCESS_TOKEN_EXPIRATION_TTL
       );
 
-      return {
-        access_token: accessToken,
-      };
+      return accessToken;
     } catch (e) {
       throw e;
     }
@@ -112,7 +111,13 @@ export class AuthService {
         account: account,
       });
 
-      return access_token;
+      return {
+        id: user.id,
+        name: user.name,
+        account: user.account,
+        profileImageURL: user.profileImageURL,
+        access_token: access_token,
+      };
     } catch (e) {
       throw e;
     }
@@ -145,13 +150,19 @@ export class AuthService {
         account: account,
       });
 
-      return access_token;
+      return {
+        id: user.id,
+        name: user.name,
+        account: user.account,
+        profileImageURL: user.profileImageURL,
+        access_token: access_token,
+      };
     } catch (e) {
       throw e;
     }
   }
 
-  async signInApple(dto: SignInOrSignUpRequestBodyDto) {
+  async signInApple(dto: SignInOrSignUpRequestBodyDto): Promise<SocialLoginResponseDto> {
     const { accessToken } = dto;
     try {
       // jwt 토큰 디코드
@@ -198,7 +209,13 @@ export class AuthService {
         account: account,
       });
 
-      return access_token;
+      return {
+        id: user.id,
+        name: user.name,
+        account: user.account,
+        profileImageURL: user.profileImageURL,
+        access_token: access_token,
+      };
     } catch (e) {
       throw e;
     }
@@ -216,6 +233,12 @@ export class AuthService {
       account: account,
     });
 
-    return access_token;
+    return {
+      id: user.id,
+      name: user.name,
+      account: user.account,
+      profileImageURL: user.profileImageURL,
+      ...access_token,
+    };
   }
 }

@@ -59,22 +59,22 @@ export class UsersController {
   @ApiTags("소셜로그인 카카오")
   @Post("sign-in/kakao")
   async signInKakao(@Body() body: SignInOrSignUpRequestBodyDto) {
-    const access_token = await this.authService.signInKakao(body);
-    return access_token;
+    const loginUserInfo = await this.authService.signInKakao(body);
+    return loginUserInfo;
   }
 
   @ApiTags("소셜로그인 애플")
   @Post("sign-in/apple")
   async signInApple(@Body() body: SignInOrSignUpRequestBodyDto) {
-    const access_token = await this.authService.signInApple(body);
-    return access_token;
+    const loginUserInfo = await this.authService.signInApple(body);
+    return loginUserInfo;
   }
 
   @ApiTags("소셜로그인 구글")
   @Post("sign-in/google")
   async signInGoogle(@Body() body: SignInOrSignUpRequestBodyDto) {
-    const access_token = await this.authService.signInGoogle(body);
-    return access_token;
+    const loginUserInfo = await this.authService.signInGoogle(body);
+    return loginUserInfo;
   }
 
   @ApiTags("로그인 (테스트용)")
