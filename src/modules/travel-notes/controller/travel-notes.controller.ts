@@ -10,15 +10,22 @@ import {
   UploadedFiles,
   UseGuards,
   UseInterceptors,
-} from '@nestjs/common';
-import { CreateTravelNoteDto } from 'src/modules/travel-notes/dtos/req/create-travel-note.dto';
-import { TravelNotesService } from 'src/modules/travel-notes/service/travel-notes.service';
-import { UpdateTravelNoteDto } from 'src/modules/travel-notes/dtos/req/update-travel-note.dto';
-import { SignInUser } from 'src/decorators/sign-in-user.decorator';
-import { UserEntity } from 'src/modules/users/entities/user.entity';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiOkResponse, ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { CreateTravelNoteDto } from "src/modules/travel-notes/dtos/req/create-travel-note.dto";
+import { TravelNotesService } from "src/modules/travel-notes/service/travel-notes.service";
+import { UpdateTravelNoteDto } from "src/modules/travel-notes/dtos/req/update-travel-note.dto";
+import { SignInUser } from "src/decorators/sign-in-user.decorator";
+import { UserEntity } from "src/modules/users/entities/user.entity";
+import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
+import { FileFieldsInterceptor } from "@nestjs/platform-express";
+import {
+  ApiBody,
+  ApiOkResponse,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from "@nestjs/swagger";
 import { TravelNoteEntity } from "../entities/travel-note.entity";
 import { BearerAuth } from "src/decorators/bearer-auth.decorator";
 
@@ -96,7 +103,6 @@ export class TravelNotesController {
     return await this.travelNotesService.create(user.id, body, images);
   }
 
-
   @ApiOperation({
     summary: "여행일지 목록 조회",
     description: "로그인한 사용자의 여행 일지를 반환",
@@ -107,7 +113,6 @@ export class TravelNotesController {
     return await this.travelNotesService.list(user.id);
   }
 
-  
   @ApiOperation({ summary: "여행일지 단건 조회" })
   @ApiParam({
     name: "id",
