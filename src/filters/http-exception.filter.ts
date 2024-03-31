@@ -4,9 +4,9 @@ import {
   ExceptionFilter,
   HttpException,
   Logger,
-} from '@nestjs/common';
-import { Request, Response } from 'express';
-import { ErrorResponseDto } from 'src/filters/error-response.dto';
+} from "@nestjs/common";
+import { Request, Response } from "express";
+import { ErrorResponseDto } from "src/filters/error-response.dto";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -20,7 +20,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const exceptionResponse = exception.getResponse();
     let body: ErrorResponseDto;
 
-    if (typeof exceptionResponse === 'string') {
+    if (typeof exceptionResponse === "string") {
       body = {
         path: request.url,
         timestamp: new Date().toISOString(),
@@ -34,12 +34,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       body = {
         path: request.url,
         timestamp: new Date().toISOString(),
-        error: exceptionResponse['error'],
-        statusCode: exceptionResponse['statusCode'],
-        message: exceptionResponse['message'],
+        error: exceptionResponse["error"],
+        statusCode: exceptionResponse["statusCode"],
+        message: exceptionResponse["message"],
       };
 
-      this.logger.error(exceptionResponse['message'], exception.stack);
+      this.logger.error(exceptionResponse["message"], exception.stack);
     }
 
     response.status(body.statusCode).json(body);

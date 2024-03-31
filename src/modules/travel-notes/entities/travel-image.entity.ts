@@ -1,4 +1,4 @@
-import { TravelImage } from '@prisma/client';
+import { TravelImage } from "@prisma/client";
 
 export class TravelImageEntity implements TravelImage {
   key: string;

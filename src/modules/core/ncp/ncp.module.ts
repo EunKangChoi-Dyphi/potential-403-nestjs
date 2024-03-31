@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { NcpService } from './ncp.service';
-import { CustomConfigModule } from 'src/modules/core/config/custom-config.module';
+import { Module } from "@nestjs/common";
+import { NcpService } from "./ncp.service";
+import { CustomConfigModule } from "src/modules/core/config/custom-config.module";
 
 // Naver-Cloud-Platform Service Modules
 @Module({

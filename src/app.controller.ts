@@ -18,7 +18,7 @@ import { ApiExcludeController, ApiExcludeEndpoint } from "@nestjs/swagger";
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly redisService: RedisService
+    private readonly redisService: RedisService,
   ) {}
 
   @Get()
@@ -35,7 +35,10 @@ export class AppController {
 
   @Post("file-upload")
   @UseInterceptors(FileInterceptor("file"))
-  async testFileUpload(@UploadedFile() file: Express.Multer.File, @Body() body: any) {
+  async testFileUpload(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: any,
+  ) {
     console.log(file);
     writeFileSync("test.jpg", file.buffer);
 
@@ -44,7 +47,10 @@ export class AppController {
 
   @Post("file-upload2")
   @UseInterceptors(FilesInterceptor("files"))
-  async testFileUpload2(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body: any) {
+  async testFileUpload2(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() body: any,
+  ) {
     console.log(files);
     console.log(body);
   }

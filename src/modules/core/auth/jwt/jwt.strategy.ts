@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { User } from "@prisma/client";
 import { ExtractJwt, Strategy } from "passport-jwt";
@@ -13,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly customConfigService: CustomConfigService,
     private readonly prismaService: PrismaService,
-    private readonly redisService: RedisService
+    private readonly redisService: RedisService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

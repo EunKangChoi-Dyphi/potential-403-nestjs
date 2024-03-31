@@ -2,9 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty } from "class-validator";
 
 export class CreateCityDto {
-  @ApiProperty({
-    
-  })
+  @ApiProperty({})
   @IsNotEmpty({ message: "도시 이름[name]은 필수 입력값입니다." })
   name: string;
 

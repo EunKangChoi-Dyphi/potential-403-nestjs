@@ -22,15 +22,20 @@ export class AwsS3Service {
   private readonly NODE_MODE;
 
   constructor(private customConfigService: CustomConfigService) {
-    this.NODE_MODE = this.customConfigService.get(ENV_KEY.NODE_ENV) ?? "development";
+    this.NODE_MODE =
+      this.customConfigService.get(ENV_KEY.NODE_ENV) ?? "development";
     this.AWS_REGION = this.customConfigService.get(ENV_KEY.AWS_REGION);
-    this.AWS_S3_BUCKET_NAME = this.customConfigService.get(ENV_KEY.AWS_S3_BUCKET_NAME);
+    this.AWS_S3_BUCKET_NAME = this.customConfigService.get(
+      ENV_KEY.AWS_S3_BUCKET_NAME,
+    );
 
     this.s3Client = new S3Client({
       region: this.AWS_REGION,
       credentials: {
         accessKeyId: this.customConfigService.get(ENV_KEY.AWS_ACCESS_KEY),
-        secretAccessKey: this.customConfigService.get(ENV_KEY.AWS_SECRET_ACCESS_KEY),
+        secretAccessKey: this.customConfigService.get(
+          ENV_KEY.AWS_SECRET_ACCESS_KEY,
+        ),
       },
     });
   }

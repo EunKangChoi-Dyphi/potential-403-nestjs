@@ -1,8 +1,8 @@
-import { CacheModuleAsyncOptions } from '@nestjs/cache-manager';
-import ENV_KEY from 'src/modules/core/config/constants/env-config.constant';
-import { CustomConfigModule } from 'src/modules/core/config/custom-config.module';
-import { CustomConfigService } from 'src/modules/core/config/custom-config.service';
-import { redisStore } from 'cache-manager-redis-store';
+import { CacheModuleAsyncOptions } from "@nestjs/cache-manager";
+import ENV_KEY from "src/modules/core/config/constants/env-config.constant";
+import { CustomConfigModule } from "src/modules/core/config/custom-config.module";
+import { CustomConfigService } from "src/modules/core/config/custom-config.service";
+import { redisStore } from "cache-manager-redis-store";
 
 export const RedisOptions: CacheModuleAsyncOptions = {
   isGlobal: true,

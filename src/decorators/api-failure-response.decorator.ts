@@ -5,13 +5,13 @@ import { timestamp } from "rxjs";
 
 export const ApiFailureResponse = (
   status: ErrorHttpStatusCode,
-  errorMessage: string | string[]
+  errorMessage: string | string[],
 ) => {
   if (typeof errorMessage === "string") {
     errorMessage = [errorMessage];
   }
 
-  const errors = errorMessage.map((error) => {
+  const errors = errorMessage.map(error => {
     return { message: error };
   });
 
@@ -25,6 +25,6 @@ export const ApiFailureResponse = (
           errors,
         },
       },
-    })
+    }),
   );
 };

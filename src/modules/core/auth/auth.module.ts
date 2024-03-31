@@ -27,7 +27,9 @@ import { RedisModule } from "src/modules/core/redis/redis.module";
         return {
           secret: customConfigService.get<string>(ENV_KEY.JWT_SECRET_KEY),
           signOptions: {
-            expiresIn: customConfigService.get<string>(ENV_KEY.JWT_ACCESS_TOKEN_EXPIRATION),
+            expiresIn: customConfigService.get<string>(
+              ENV_KEY.JWT_ACCESS_TOKEN_EXPIRATION,
+            ),
           },
         };
       },

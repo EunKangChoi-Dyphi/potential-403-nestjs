@@ -16,7 +16,7 @@ export const findWithWhereClauses = (
   const whereClauses = {};
 
   for (const key in filters) {
-    if (filters[key] === '') continue;
+    if (filters[key] === "") continue;
 
     if (searchFields?.includes(key)) {
       whereClauses[key] = { contains: filters[key] };

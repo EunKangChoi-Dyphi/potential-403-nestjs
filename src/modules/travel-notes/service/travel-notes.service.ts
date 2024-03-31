@@ -36,17 +36,17 @@ const select: Prisma.TravelNoteSelect = {
 export class TravelNotesService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly awsS3Service: AwsS3Service
+    private readonly awsS3Service: AwsS3Service,
   ) {}
 
   async create(
     userId: number,
     dto: CreateTravelNoteDto,
-    images: { sequence: number; file: Express.Multer.File }[]
+    images: { sequence: number; file: Express.Multer.File }[],
   ) {
     dto.validate();
 
-    return this.prismaService.$transaction(async (transaction) => {
+    return this.prismaService.$transaction(async transaction => {
       const travelNote = await transaction.travelNote.create({
         data: {
           userId,
@@ -61,7 +61,9 @@ export class TravelNotesService {
 
       if (images.length > 0) {
         // 메인 이미지 인덱스
-        const mainImageIndex = images.some((image) => image.sequence === dto.mainImageIndex)
+        const mainImageIndex = images.some(
+          image => image.sequence === dto.mainImageIndex,
+        )
           ? dto.mainImageIndex
           : 1;
 
@@ -74,7 +76,8 @@ export class TravelNotesService {
             Body: image.file.buffer,
             ContentType: image.file.mimetype,
           };
-          const { url, Key } = await this.awsS3Service.uploadImageToS3Bucket(request);
+          const { url, Key } =
+            await this.awsS3Service.uploadImageToS3Bucket(request);
 
           // 여행 일지 이미지 엔티티 생성
           await transaction.travelImage.create({
@@ -104,7 +107,7 @@ export class TravelNotesService {
   }
 
   delete(userId: number, id: number) {
-    return this.prismaService.$transaction(async (transaction) => {
+    return this.prismaService.$transaction(async transaction => {
       const travelNote = await transaction.travelNote.findUnique({
         where: { id, userId },
         include: { images: true },
@@ -116,9 +119,9 @@ export class TravelNotesService {
 
       // 이미지 삭제
       await Promise.all(
-        travelNote.images.map((image) =>
-          this.awsS3Service.deleteImageFromS3Bucket({ Key: image.key })
-        )
+        travelNote.images.map(image =>
+          this.awsS3Service.deleteImageFromS3Bucket({ Key: image.key }),
+        ),
       );
 
       await transaction.travelNote.delete({
@@ -131,11 +134,11 @@ export class TravelNotesService {
     userId: number,
     travelNoteId: number,
     dto: UpdateTravelNoteDto,
-    images: { sequence: number; file: Express.Multer.File }[]
+    images: { sequence: number; file: Express.Multer.File }[],
   ) {
     dto.validate();
 
-    return this.prismaService.$transaction(async (transaction) => {
+    return this.prismaService.$transaction(async transaction => {
       const travelNote = await transaction.travelNote.findUnique({
         where: { id: travelNoteId, userId },
         include: { images: true },
@@ -167,19 +170,21 @@ export class TravelNotesService {
       //
 
       // 기존 이미지 삭제
-      const newImageSequences = images.map((image) => image.sequence);
+      const newImageSequences = images.map(image => image.sequence);
       await Promise.all(
         // 기존 이미지 중에 새로 입력한 이미지의 자리 확인
         travelNote.images
-          .filter((it) => newImageSequences.includes(it.sequence))
-          .map(async (deletedImage) => {
+          .filter(it => newImageSequences.includes(it.sequence))
+          .map(async deletedImage => {
             // S3에서 이미지 삭제
-            await this.awsS3Service.deleteImageFromS3Bucket({ Key: deletedImage.key });
+            await this.awsS3Service.deleteImageFromS3Bucket({
+              Key: deletedImage.key,
+            });
             // 이미지 삭제
             await transaction.travelImage.delete({
               where: { id: deletedImage.id },
             });
-          })
+          }),
       );
 
       if (images.length > 0) {
@@ -191,7 +196,8 @@ export class TravelNotesService {
             Body: image.file.buffer,
             ContentType: image.file.mimetype,
           };
-          const { url, Key } = await this.awsS3Service.uploadImageToS3Bucket(request);
+          const { url, Key } =
+            await this.awsS3Service.uploadImageToS3Bucket(request);
 
           await transaction.travelImage.create({
             data: {
