@@ -69,9 +69,11 @@ model Country {
 
 model City {
   id          Int          @id @default(autoincrement()) // PK
-  name        String       @unique
+  name        String       
   country     Country      @relation(fields: [countryCode], references: [code])
   countryCode String // 참조키
+  latitude    String?
+  longitude    String?
   createdAt   DateTime     @default(now()) // 생성일
   updatedAt   DateTime     @updatedAt // 수정일
   TravelNote  TravelNote[]

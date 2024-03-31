@@ -5,7 +5,7 @@ export class SearchCountryDto {
   @ApiProperty({
     required: false,
     description: "국가이름",
-    example: "Afghanistan",
+    example: "South Korea",
   })
   @IsOptional()
   @IsString()

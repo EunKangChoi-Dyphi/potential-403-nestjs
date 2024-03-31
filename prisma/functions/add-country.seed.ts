@@ -1,19 +1,22 @@
 // prisma/functions/add-country.ts
+import fs from "fs";
+import path from "path";
 
 const addCountry = async (prisma) => {
-  // const countries = require('../../data/Countries.json');
-  const countries = require('../../data/Countries2.json');
-  await Promise.all(
-    countries.map((it) => {
-      return prisma.country.create({
-        data: {
-          name: it.name,
-          // code: it.id,
-          code: it.iso2,
-        },
-      });
-    }),
-  );
+  const file = fs.readFileSync(path.join(__dirname, "..", "data", "CountiesAndCity.json"), "utf-8");
+  const countries = JSON.parse(file).filter((c) => c.cities);
+
+  const result = countries.map((c) => {
+    return prisma.country.create({
+      data: {
+        code: c.id,
+        name: c.name_y || c.name_x,
+        continent: c.region,
+      },
+    });
+  });
+
+  await Promise.all(result);
 };
 
 export default addCountry;

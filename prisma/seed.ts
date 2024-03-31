@@ -1,13 +1,14 @@
 // prisma/seed.ts
-import { PrismaClient } from '@prisma/client';
-import addCity from './functions/add-city.seed';
-import addCountry from './functions/add-country.seed';
+import { PrismaClient } from "@prisma/client";
+import addCity from "./functions/add-city.seed";
+import addCountry from "./functions/add-country.seed";
 
 const prisma = new PrismaClient();
 
 async function main() {
   await addCountry(prisma);
   await addCity(prisma);
+
   // await prisma.user.create({
   //   data: {
   //     email: 'trazzle@trazzle.com',
