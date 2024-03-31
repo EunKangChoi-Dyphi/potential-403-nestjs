@@ -18,7 +18,7 @@ import { SignInUser } from 'src/decorators/sign-in-user.decorator';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 
 @ApiBearerAuth()
@@ -29,6 +29,28 @@ export class TravelNotesController {
   constructor(private readonly travelNotesService: TravelNotesService) {}
 
   @ApiOperation({ summary: '여행일지 생성' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image1: { type: 'file', format: 'binary', description: '여행일지 이미지1', },
+        image2: { type: 'file', format: 'binary', description: '여행일지 이미지2', },
+        image3: { type: 'file', format: 'binary', description: '여행일지 이미지3', },
+        image4: { type: 'file', format: 'binary', description: '여행일지 이미지4', },
+        image5: { type: 'file', format: 'binary', description: '여행일지 이미지5', },
+        image6: { type: 'file', format: 'binary', description: '여행일지 이미지6', },
+        startDate: { type: 'string', example: '2024-03-20', description: '여행 시작일', },
+        endDate: { type: 'string', example: '2024-03-25', description: '여행 종료일', },
+        title: { type: 'string', example: '서울여행', description: '여행일지 제목'},
+        review: { type: 'string', example: '서울여행 재밌다.', description: '여행일지 내용'},
+        cityId: { type: 'number', example: '1', description: '도시 ID'},
+        cityName: { type: 'string', example: '서울', description: '도시명(도시ID가 없을 경우에만 입력 -> 기타도시 선택시)'},
+        mainImageIndex: { type: 'number', example: 1, description: '메인 이미지 인덱스 (1 - 6)'},
+      },
+      required: ['startDate', 'endDate', 'title', 'mainImageIndex'],
+    },
+  })
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor([
@@ -68,13 +90,36 @@ export class TravelNotesController {
     return await this.travelNotesService.create(user.id, body, images);
   }
 
-  @ApiOperation({ summary: '여행일지 목록 조회' })
+  @ApiOperation({ summary: '여행일지 목록 조회', description: '로그인한 사용자의 여행 일지를 반환' })
   @Get()
   async list(@SignInUser() user: UserEntity) {
     return await this.travelNotesService.list(user.id);
   }
 
   @ApiOperation({ summary: '여행일지 수정' })
+  @ApiConsumes('multipart/form-data')
+  @ApiParam({ name: 'id', required: true, description: '여행일지ID', type: String })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image1: { type: 'file', format: 'binary', description: '여행일지 이미지1', },
+        image2: { type: 'file', format: 'binary', description: '여행일지 이미지2', },
+        image3: { type: 'file', format: 'binary', description: '여행일지 이미지3', },
+        image4: { type: 'file', format: 'binary', description: '여행일지 이미지4', },
+        image5: { type: 'file', format: 'binary', description: '여행일지 이미지5', },
+        image6: { type: 'file', format: 'binary', description: '여행일지 이미지6', },
+        startDate: { type: 'string', example: '2024-03-20', description: '여행 시작일', },
+        endDate: { type: 'string', example: '2024-03-25', description: '여행 종료일', },
+        title: { type: 'string', example: '서울여행', description: '여행일지 제목'},
+        review: { type: 'string', example: '서울여행 재밌다.', description: '여행일지 내용'},
+        cityId: { type: 'number', example: '1', description: '도시 ID'},
+        cityName: { type: 'string', example: '서울', description: '도시명(도시ID가 없을 경우에만 입력 -> 기타도시 선택시)'},
+        mainImageIndex: { type: 'number', example: 1, description: '메인 이미지 인덱스 (1 - 6)'},
+      },
+      required: ['startDate', 'endDate', 'title', 'mainImageIndex'],
+    },
+  })
   @Put(':id')
   @UseInterceptors(
     FileFieldsInterceptor([
@@ -115,6 +160,8 @@ export class TravelNotesController {
   }
 
   @ApiOperation({ summary: '여행일지 삭제' })
+  @ApiConsumes('application/json')
+  @ApiParam({ name: 'id', required: true, description: '여행일지ID', type: String })
   @Delete(':id')
   async delete(
     @SignInUser() user: UserEntity,
