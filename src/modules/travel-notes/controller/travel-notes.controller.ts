@@ -28,8 +28,9 @@ import {
   ApiParam,
 } from "@nestjs/swagger";
 import { TravelNoteEntity } from "../entities/travel-note.entity";
+import { BearerAuth } from "src/decorators/bearer-auth.decorator";
 
-@ApiBearerAuth()
+@BearerAuth()
 @ApiTags("여행일지")
 @UseGuards(JwtAuthGuard)
 @Controller()
