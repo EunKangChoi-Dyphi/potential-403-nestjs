@@ -56,7 +56,7 @@ export class CreateTravelNoteDto {
   cityId: number;
 
   @ApiProperty({
-    description: "도시명",
+    description: "도시명(도시ID가 없을 경우에만 입력 -> 기타도시 선택시)",
     example: "Seoul",
     required: false,
   })
@@ -64,9 +64,9 @@ export class CreateTravelNoteDto {
   cityName: string;
 
   @ApiProperty({
-    description: "썸네일 이미지 인덱스 번호",
+    description: "메인 이미지 인덱스 (1 - 6)",
     example: 1,
-    required: true,
+    required: false,
   })
   @Transform(isNumberOrElseThrow("메인 이미지 인덱스[mainImageIndex]는 숫자여야 합니다."))
   mainImageIndex: number;
