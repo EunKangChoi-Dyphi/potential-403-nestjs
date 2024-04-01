@@ -1,15 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import ENV_KEY from './constants/env-config.constant';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import ENV_KEY from "./constants/env-config.constant";
 
 @Injectable()
 export class CustomConfigService {
-  private readonly PRODUCTION = 'production'; // 배포
-  private readonly DEVELOPMENT = 'development'; //개발 & 테스트
+  private readonly PRODUCTION = "production"; // 배포
+  private readonly DEVELOPMENT = "development"; //개발 & 테스트
 
-  constructor(
-    private readonly configService: ConfigService<typeof ENV_KEY, true>,
-  ) {}
+  constructor(private readonly configService: ConfigService<typeof ENV_KEY, true>) {}
 
   get<T>(key: (typeof ENV_KEY)[keyof typeof ENV_KEY]): T {
     return this.configService.get<T>(key);

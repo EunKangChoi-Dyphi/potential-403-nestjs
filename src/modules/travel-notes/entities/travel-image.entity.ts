@@ -1,4 +1,4 @@
-import { TravelImage } from '@prisma/client';
+import { TravelImage } from "@prisma/client";
 
 export class TravelImageEntity implements TravelImage {
   key: string;
@@ -9,12 +9,7 @@ export class TravelImageEntity implements TravelImage {
   createdAt: Date;
   travelNoteId: number;
 
-  static of(
-    sequence: number,
-    url: string,
-    isMain: boolean,
-    travelNoteId: number,
-  ): TravelImageEntity {
+  static of(sequence: number, url: string, isMain: boolean, travelNoteId: number): TravelImageEntity {
     const travelImage = new TravelImageEntity();
     travelImage.sequence = sequence;
     travelImage.url = url;

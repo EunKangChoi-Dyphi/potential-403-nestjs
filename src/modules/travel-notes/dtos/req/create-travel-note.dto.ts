@@ -1,11 +1,7 @@
 import { IsNotEmpty, IsOptional } from "class-validator";
 import { Transform } from "class-transformer";
 import { LocalDate } from "@js-joda/core";
-import {
-  isNumberOrElseThrow,
-  isOptionalOrNumberOrElseThrow,
-  toLocalDate,
-} from "src/util/transform";
+import { isNumberOrElseThrow, isOptionalOrNumberOrElseThrow, toLocalDate } from "src/util/transform";
 import { BadRequestException, ForbiddenException } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -79,9 +75,7 @@ export class CreateTravelNoteDto {
       throw new BadRequestException("도시ID[cityId] 또는 도시 이름[cityName]이 필요 합니다.");
     }
     if (this.cityId && this.cityName) {
-      throw new BadRequestException(
-        "도시ID[cityId]와 도시 이름[cityName] 중 하나만 입력해야 합니다."
-      );
+      throw new BadRequestException("도시ID[cityId]와 도시 이름[cityName] 중 하나만 입력해야 합니다.");
     }
     if (this.mainImageIndex && (this.mainImageIndex < 1 || this.mainImageIndex > 6)) {
       throw new ForbiddenException("메인 이미지 인덱스는 1~6 사이만 가능합니다.");

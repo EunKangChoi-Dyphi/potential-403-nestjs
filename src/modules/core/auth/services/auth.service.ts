@@ -30,11 +30,9 @@ export class AuthService {
     @Inject(JWK_CLIENT_TOKEN)
     private readonly jwksClient: JwksRsa.JwksClient,
     private readonly redisService: RedisService,
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
   ) {
-    this.JWT_ACCESS_TOKEN_EXPIRATION_TTL = +this.customConfigService.get(
-      ENV_KEY.JWT_ACCESS_TOKEN_EXPIRATION_TTL
-    );
+    this.JWT_ACCESS_TOKEN_EXPIRATION_TTL = +this.customConfigService.get(ENV_KEY.JWT_ACCESS_TOKEN_EXPIRATION_TTL);
   }
   async signOut(userId: number) {
     try {
@@ -54,11 +52,7 @@ export class AuthService {
       const accessToken = await this.jwtService.signAsync(payload);
 
       // redis에 등록
-      await this.redisService.set(
-        `user-${userId}`,
-        accessToken,
-        this.JWT_ACCESS_TOKEN_EXPIRATION_TTL
-      );
+      await this.redisService.set(`user-${userId}`, accessToken, this.JWT_ACCESS_TOKEN_EXPIRATION_TTL);
 
       return accessToken;
     } catch (e) {
@@ -75,7 +69,7 @@ export class AuthService {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        })
+        }),
       );
 
       if (
@@ -92,7 +86,9 @@ export class AuthService {
       const { id } = userInfoKakao.data;
       const account = `${OAuthSocialLoginType.Kakao}-${id}`;
 
-      let user = await this.prismaService.user.findFirst({ where: { account } });
+      let user = await this.prismaService.user.findFirst({
+        where: { account },
+      });
       if (!user) {
         // account 값이 해당하는 유저 데이터로우가 존재하지 않음 -> 등록
         user = await this.prismaService.user.create({
@@ -132,7 +128,9 @@ export class AuthService {
 
       const account = `${OAuthSocialLoginType.Google}-${googleToken.aud}`;
 
-      let user = await this.prismaService.user.findFirst({ where: { account } });
+      let user = await this.prismaService.user.findFirst({
+        where: { account },
+      });
       if (!user) {
         // account 값이 해당하는 유저 데이터로우가 존재하지 않음 -> 등록
         user = await this.prismaService.user.create({
@@ -192,7 +190,9 @@ export class AuthService {
       //todo - payload가 무엇인지 확인이 필요...
       const account = `${OAuthSocialLoginType.Apple}-${payload.sub}`;
 
-      let user = await this.prismaService.user.findFirst({ where: { account } });
+      let user = await this.prismaService.user.findFirst({
+        where: { account },
+      });
       if (!user) {
         // account 값이 해당하는 유저 데이터로우가 존재하지 않음 -> 등록
         user = await this.prismaService.user.create({
@@ -225,7 +225,9 @@ export class AuthService {
   }
 
   async signInAccount(account: string) {
-    const user = await this.prismaService.user.findFirst({ where: { account } });
+    const user = await this.prismaService.user.findFirst({
+      where: { account },
+    });
 
     if (!user) {
       throw new NotFoundException("존재하지 않는 회원입니다.");

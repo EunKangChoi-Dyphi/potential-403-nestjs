@@ -18,14 +18,7 @@ import { SignInUser } from "src/decorators/sign-in-user.decorator";
 import { UserEntity } from "src/modules/users/entities/user.entity";
 import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
-import {
-  ApiBody,
-  ApiOkResponse,
-  ApiConsumes,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBody, ApiOkResponse, ApiConsumes, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { TravelNoteEntity } from "../entities/travel-note.entity";
 import { BearerAuth } from "src/decorators/bearer-auth.decorator";
 
@@ -43,23 +36,67 @@ export class TravelNotesController {
     schema: {
       type: "object",
       properties: {
-        image1: { type: "file", format: "binary", description: "여행일지 이미지1" },
-        image2: { type: "file", format: "binary", description: "여행일지 이미지2" },
-        image3: { type: "file", format: "binary", description: "여행일지 이미지3" },
-        image4: { type: "file", format: "binary", description: "여행일지 이미지4" },
-        image5: { type: "file", format: "binary", description: "여행일지 이미지5" },
-        image6: { type: "file", format: "binary", description: "여행일지 이미지6" },
-        startDate: { type: "string", example: "2024-03-20", description: "여행 시작일" },
-        endDate: { type: "string", example: "2024-03-25", description: "여행 종료일" },
-        title: { type: "string", example: "서울여행", description: "여행일지 제목" },
-        review: { type: "string", example: "서울여행 재밌다.", description: "여행일지 내용" },
+        image1: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지1",
+        },
+        image2: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지2",
+        },
+        image3: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지3",
+        },
+        image4: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지4",
+        },
+        image5: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지5",
+        },
+        image6: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지6",
+        },
+        startDate: {
+          type: "string",
+          example: "2024-03-20",
+          description: "여행 시작일",
+        },
+        endDate: {
+          type: "string",
+          example: "2024-03-25",
+          description: "여행 종료일",
+        },
+        title: {
+          type: "string",
+          example: "서울여행",
+          description: "여행일지 제목",
+        },
+        review: {
+          type: "string",
+          example: "서울여행 재밌다.",
+          description: "여행일지 내용",
+        },
         cityId: { type: "number", example: "1", description: "도시 ID" },
         cityName: {
           type: "string",
           example: "서울",
           description: "도시명(도시ID가 없을 경우에만 입력 -> 기타도시 선택시)",
         },
-        mainImageIndex: { type: "number", example: 1, description: "메인 이미지 인덱스 (1 - 6)" },
+        mainImageIndex: {
+          type: "number",
+          example: 1,
+          description: "메인 이미지 인덱스 (1 - 6)",
+        },
       },
       required: ["startDate", "endDate", "title", "mainImageIndex"],
     },
@@ -73,7 +110,7 @@ export class TravelNotesController {
       { name: "image4", maxCount: 1 },
       { name: "image5", maxCount: 1 },
       { name: "image6", maxCount: 1 },
-    ])
+    ]),
   )
   async create(
     @SignInUser() user: UserEntity,
@@ -86,7 +123,7 @@ export class TravelNotesController {
       image4?: Express.Multer.File[];
       image5?: Express.Multer.File[];
       image6?: Express.Multer.File[];
-    }
+    },
   ) {
     // console.log(body);
     const images = [
@@ -97,8 +134,8 @@ export class TravelNotesController {
       { sequence: 5, file: files?.image5 ? files.image5[0] : null },
       { sequence: 6, file: files?.image6 ? files.image6[0] : null },
     ]
-      .filter((image) => image.file) // 파일 존재
-      .filter((image) => image.file.size > 0); // 사이즈 0 이상
+      .filter(image => image.file) // 파일 존재
+      .filter(image => image.file.size > 0); // 사이즈 0 이상
 
     return await this.travelNotesService.create(user.id, body, images);
   }
@@ -121,7 +158,10 @@ export class TravelNotesController {
     description: "여행일지 고유번호 PK",
     example: 1,
   })
-  @ApiOkResponse({ type: TravelNoteEntity, description: "id에 부합하는 단건 조회" })
+  @ApiOkResponse({
+    type: TravelNoteEntity,
+    description: "id에 부합하는 단건 조회",
+  })
   @Get(":id")
   async getOneTravelNote(@Param("id", ParseIntPipe) id: number, @SignInUser() user: UserEntity) {
     return await this.travelNotesService.getOne(id);
@@ -129,28 +169,77 @@ export class TravelNotesController {
 
   @ApiOperation({ summary: "여행일지 수정" })
   @ApiConsumes("multipart/form-data")
-  @ApiParam({ name: "id", required: true, description: "여행일지ID", type: String })
+  @ApiParam({
+    name: "id",
+    required: true,
+    description: "여행일지ID",
+    type: String,
+  })
   @ApiBody({
     schema: {
       type: "object",
       properties: {
-        image1: { type: "file", format: "binary", description: "여행일지 이미지1" },
-        image2: { type: "file", format: "binary", description: "여행일지 이미지2" },
-        image3: { type: "file", format: "binary", description: "여행일지 이미지3" },
-        image4: { type: "file", format: "binary", description: "여행일지 이미지4" },
-        image5: { type: "file", format: "binary", description: "여행일지 이미지5" },
-        image6: { type: "file", format: "binary", description: "여행일지 이미지6" },
-        startDate: { type: "string", example: "2024-03-20", description: "여행 시작일" },
-        endDate: { type: "string", example: "2024-03-25", description: "여행 종료일" },
-        title: { type: "string", example: "서울여행", description: "여행일지 제목" },
-        review: { type: "string", example: "서울여행 재밌다.", description: "여행일지 내용" },
+        image1: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지1",
+        },
+        image2: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지2",
+        },
+        image3: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지3",
+        },
+        image4: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지4",
+        },
+        image5: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지5",
+        },
+        image6: {
+          type: "file",
+          format: "binary",
+          description: "여행일지 이미지6",
+        },
+        startDate: {
+          type: "string",
+          example: "2024-03-20",
+          description: "여행 시작일",
+        },
+        endDate: {
+          type: "string",
+          example: "2024-03-25",
+          description: "여행 종료일",
+        },
+        title: {
+          type: "string",
+          example: "서울여행",
+          description: "여행일지 제목",
+        },
+        review: {
+          type: "string",
+          example: "서울여행 재밌다.",
+          description: "여행일지 내용",
+        },
         cityId: { type: "number", example: "1", description: "도시 ID" },
         cityName: {
           type: "string",
           example: "서울",
           description: "도시명(도시ID가 없을 경우에만 입력 -> 기타도시 선택시)",
         },
-        mainImageIndex: { type: "number", example: 1, description: "메인 이미지 인덱스 (1 - 6)" },
+        mainImageIndex: {
+          type: "number",
+          example: 1,
+          description: "메인 이미지 인덱스 (1 - 6)",
+        },
       },
       required: ["startDate", "endDate", "title", "mainImageIndex"],
     },
@@ -164,7 +253,7 @@ export class TravelNotesController {
       { name: "image4", maxCount: 1 },
       { name: "image5", maxCount: 1 },
       { name: "image6", maxCount: 1 },
-    ])
+    ]),
   )
   async update(
     @SignInUser() user: UserEntity,
@@ -178,7 +267,7 @@ export class TravelNotesController {
       image4?: Express.Multer.File[];
       image5?: Express.Multer.File[];
       image6?: Express.Multer.File[];
-    }
+    },
   ) {
     const images = [
       { sequence: 1, file: files?.image1 ? files.image1[0] : null },
@@ -188,8 +277,8 @@ export class TravelNotesController {
       { sequence: 5, file: files?.image5 ? files.image5[0] : null },
       { sequence: 6, file: files?.image6 ? files.image6[0] : null },
     ]
-      .filter((image) => image.file) // 파일 존재
-      .filter((image) => image.file.size > 0); // 사이즈 0 이상
+      .filter(image => image.file) // 파일 존재
+      .filter(image => image.file.size > 0); // 사이즈 0 이상
 
     return await this.travelNotesService.update(user.id, id, body, images);
   }

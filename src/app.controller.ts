@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  UploadedFile,
-  UploadedFiles,
-  UseInterceptors,
-} from "@nestjs/common";
+import { Body, Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { AppService } from "./app.service";
 import { RedisService } from "src/modules/core/redis/redis.service";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
@@ -18,7 +10,7 @@ import { ApiExcludeController, ApiExcludeEndpoint } from "@nestjs/swagger";
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly redisService: RedisService
+    private readonly redisService: RedisService,
   ) {}
 
   @Get()

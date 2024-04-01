@@ -17,14 +17,7 @@ import { UserEntity } from "../entities/user.entity";
 import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { AuthService } from "src/modules/core/auth/services/auth.service";
 import { CustomConfigService } from "src/modules/core/config/custom-config.service";
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
   SignInOrSignUpAppleRequestBodyDto,
@@ -41,7 +34,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly customConfigService: CustomConfigService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
   // 로그인한 회원정보 조회
@@ -51,7 +44,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async myProfile(
-    @SignInUser() user: UserEntity // login required
+    @SignInUser() user: UserEntity, // login required
   ) {
     return await this.usersService.getOneUser(user.id);
   }
@@ -82,7 +75,10 @@ export class UsersController {
   @ApiOperation({
     summary: "카카오 연동 로그인",
   })
-  @ApiOkResponse({ description: "카카오 연동 로그인 유저정보", type: SocialLoginResponseDto })
+  @ApiOkResponse({
+    description: "카카오 연동 로그인 유저정보",
+    type: SocialLoginResponseDto,
+  })
   @Post("sign-in/kakao")
   async signInKakao(@Body() body: SignInOrSignUpKakaoRequestBodyDto) {
     const loginUserInfo = await this.authService.signInKakao(body);
@@ -105,7 +101,10 @@ export class UsersController {
   @ApiOperation({
     summary: "구글 연동 로그인",
   })
-  @ApiOkResponse({ description: "구글 연동 로그인 유저정보", type: SocialLoginResponseDto })
+  @ApiOkResponse({
+    description: "구글 연동 로그인 유저정보",
+    type: SocialLoginResponseDto,
+  })
   @Post("sign-in/google")
   async signInGoogle(@Body() body: SignInOrSignUpGoogleRequestBodyDto) {
     const loginUserInfo = await this.authService.signInGoogle(body);
@@ -122,7 +121,10 @@ export class UsersController {
   @ApiConsumes("multipart/form")
   @BearerAuth(JwtAuthGuard)
   @ApiOperation({ summary: "유저정보 수정" })
-  @ApiOkResponse({ description: "유저명 / 프로필이미지 / 소개글 수정", type: UserEntity })
+  @ApiOkResponse({
+    description: "유저명 / 프로필이미지 / 소개글 수정",
+    type: UserEntity,
+  })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor("file"))
   @ApiBody({
@@ -133,7 +135,7 @@ export class UsersController {
   async updateUser(
     @SignInUser() user: UserEntity,
     @Body() body: UpdateUserRequestBodyDto,
-    @UploadedFile() file: Express.Multer.File
+    @UploadedFile() file: Express.Multer.File,
   ) {
     const { name, intro } = body;
     return await this.usersService.updateUser({

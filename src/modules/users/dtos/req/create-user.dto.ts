@@ -1,8 +1,8 @@
-import { OmitType } from '@nestjs/mapped-types';
-import { UserEntity } from '../../entities/user.entity';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { OmitType } from "@nestjs/mapped-types";
+import { UserEntity } from "../../entities/user.entity";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
-export class CreateUserDto extends OmitType(UserEntity, ['id']) {
+export class CreateUserDto extends OmitType(UserEntity, ["id"]) {
   @IsNotEmpty()
   @IsString()
   name: string;

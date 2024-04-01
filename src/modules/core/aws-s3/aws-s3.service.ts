@@ -1,16 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CustomConfigService } from "../config/custom-config.service";
-import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-  DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
-import {
-  deleteObjectCommandDto,
-  getObjectCommandDto,
-  putObjectCommandDto,
-} from "./dtos/s3-command.dto";
+import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { deleteObjectCommandDto, getObjectCommandDto, putObjectCommandDto } from "./dtos/s3-command.dto";
 import ENV_KEY from "../config/constants/env-config.constant";
 import { Readable } from "stream";
 

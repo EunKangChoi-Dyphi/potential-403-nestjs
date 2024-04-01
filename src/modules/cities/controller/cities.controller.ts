@@ -1,15 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Put,
-  Query,
-  ParseIntPipe,
-} from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Query, ParseIntPipe } from "@nestjs/common";
 import { CitiesService } from "../service/cities.service";
 import { CreateCityDto } from "../dto/create-city.dto";
 import { UpdateCityDto } from "../dto/update-city.dto";

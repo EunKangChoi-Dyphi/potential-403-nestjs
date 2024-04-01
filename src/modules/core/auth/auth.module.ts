@@ -10,10 +10,7 @@ import { JwtStrategy } from "src/modules/core/auth/jwt/jwt.strategy";
 import { OAuth2Client } from "google-auth-library";
 import jwksClient from "jwks-rsa";
 import ENV_KEY from "src/modules/core/config/constants/env-config.constant";
-import {
-  GOOGLE_OAUTH_CLIENT_TOKEN,
-  JWK_CLIENT_TOKEN,
-} from "src/modules/core/auth/constants/auth.constant";
+import { GOOGLE_OAUTH_CLIENT_TOKEN, JWK_CLIENT_TOKEN } from "src/modules/core/auth/constants/auth.constant";
 import { RedisModule } from "src/modules/core/redis/redis.module";
 
 @Module({

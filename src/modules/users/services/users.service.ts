@@ -9,7 +9,7 @@ import { PrismaService } from "src/modules/core/database/prisma/prisma.service";
 export class UsersService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly awsS3Service: AwsS3Service
+    private readonly awsS3Service: AwsS3Service,
   ) {}
 
   async getOneUser(userId: number) {
@@ -33,7 +33,7 @@ export class UsersService {
   async updateUser(dto: UpdateUserDto) {
     const { id, name, intro, profileImageFile } = dto;
 
-    this.prismaService.$transaction(async (transaction) => {
+    this.prismaService.$transaction(async transaction => {
       // 1. 유저정보 유무 확인
       const user = await transaction.user.findFirst({ where: { id: id } });
       if (!user) {
