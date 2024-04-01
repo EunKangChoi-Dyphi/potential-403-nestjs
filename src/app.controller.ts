@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  UploadedFile,
-  UploadedFiles,
-  UseInterceptors,
-} from "@nestjs/common";
+import { Body, Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { AppService } from "./app.service";
 import { RedisService } from "src/modules/core/redis/redis.service";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
@@ -35,10 +27,7 @@ export class AppController {
 
   @Post("file-upload")
   @UseInterceptors(FileInterceptor("file"))
-  async testFileUpload(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() body: any,
-  ) {
+  async testFileUpload(@UploadedFile() file: Express.Multer.File, @Body() body: any) {
     console.log(file);
     writeFileSync("test.jpg", file.buffer);
 
@@ -47,10 +36,7 @@ export class AppController {
 
   @Post("file-upload2")
   @UseInterceptors(FilesInterceptor("files"))
-  async testFileUpload2(
-    @UploadedFiles() files: Array<Express.Multer.File>,
-    @Body() body: any,
-  ) {
+  async testFileUpload2(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body: any) {
     console.log(files);
     console.log(body);
   }

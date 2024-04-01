@@ -39,11 +39,7 @@ export class TravelNotesService {
     private readonly awsS3Service: AwsS3Service,
   ) {}
 
-  async create(
-    userId: number,
-    dto: CreateTravelNoteDto,
-    images: { sequence: number; file: Express.Multer.File }[],
-  ) {
+  async create(userId: number, dto: CreateTravelNoteDto, images: { sequence: number; file: Express.Multer.File }[]) {
     dto.validate();
 
     return this.prismaService.$transaction(async transaction => {
@@ -61,11 +57,7 @@ export class TravelNotesService {
 
       if (images.length > 0) {
         // 메인 이미지 인덱스
-        const mainImageIndex = images.some(
-          image => image.sequence === dto.mainImageIndex,
-        )
-          ? dto.mainImageIndex
-          : 1;
+        const mainImageIndex = images.some(image => image.sequence === dto.mainImageIndex) ? dto.mainImageIndex : 1;
 
         for (const image of images) {
           // 이미지를 스토리지에 저자
@@ -76,8 +68,7 @@ export class TravelNotesService {
             Body: image.file.buffer,
             ContentType: image.file.mimetype,
           };
-          const { url, Key } =
-            await this.awsS3Service.uploadImageToS3Bucket(request);
+          const { url, Key } = await this.awsS3Service.uploadImageToS3Bucket(request);
 
           // 여행 일지 이미지 엔티티 생성
           await transaction.travelImage.create({
@@ -118,11 +109,7 @@ export class TravelNotesService {
       }
 
       // 이미지 삭제
-      await Promise.all(
-        travelNote.images.map(image =>
-          this.awsS3Service.deleteImageFromS3Bucket({ Key: image.key }),
-        ),
-      );
+      await Promise.all(travelNote.images.map(image => this.awsS3Service.deleteImageFromS3Bucket({ Key: image.key })));
 
       await transaction.travelNote.delete({
         where: { id },
@@ -196,8 +183,7 @@ export class TravelNotesService {
             Body: image.file.buffer,
             ContentType: image.file.mimetype,
           };
-          const { url, Key } =
-            await this.awsS3Service.uploadImageToS3Bucket(request);
+          const { url, Key } = await this.awsS3Service.uploadImageToS3Bucket(request);
 
           await transaction.travelImage.create({
             data: {

@@ -1,16 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CustomConfigService } from "../config/custom-config.service";
-import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-  DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
-import {
-  deleteObjectCommandDto,
-  getObjectCommandDto,
-  putObjectCommandDto,
-} from "./dtos/s3-command.dto";
+import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { deleteObjectCommandDto, getObjectCommandDto, putObjectCommandDto } from "./dtos/s3-command.dto";
 import ENV_KEY from "../config/constants/env-config.constant";
 import { Readable } from "stream";
 
@@ -22,20 +13,15 @@ export class AwsS3Service {
   private readonly NODE_MODE;
 
   constructor(private customConfigService: CustomConfigService) {
-    this.NODE_MODE =
-      this.customConfigService.get(ENV_KEY.NODE_ENV) ?? "development";
+    this.NODE_MODE = this.customConfigService.get(ENV_KEY.NODE_ENV) ?? "development";
     this.AWS_REGION = this.customConfigService.get(ENV_KEY.AWS_REGION);
-    this.AWS_S3_BUCKET_NAME = this.customConfigService.get(
-      ENV_KEY.AWS_S3_BUCKET_NAME,
-    );
+    this.AWS_S3_BUCKET_NAME = this.customConfigService.get(ENV_KEY.AWS_S3_BUCKET_NAME);
 
     this.s3Client = new S3Client({
       region: this.AWS_REGION,
       credentials: {
         accessKeyId: this.customConfigService.get(ENV_KEY.AWS_ACCESS_KEY),
-        secretAccessKey: this.customConfigService.get(
-          ENV_KEY.AWS_SECRET_ACCESS_KEY,
-        ),
+        secretAccessKey: this.customConfigService.get(ENV_KEY.AWS_SECRET_ACCESS_KEY),
       },
     });
   }

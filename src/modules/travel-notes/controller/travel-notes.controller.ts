@@ -18,14 +18,7 @@ import { SignInUser } from "src/decorators/sign-in-user.decorator";
 import { UserEntity } from "src/modules/users/entities/user.entity";
 import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
-import {
-  ApiBody,
-  ApiOkResponse,
-  ApiConsumes,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBody, ApiOkResponse, ApiConsumes, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { TravelNoteEntity } from "../entities/travel-note.entity";
 import { BearerAuth } from "src/decorators/bearer-auth.decorator";
 
@@ -170,10 +163,7 @@ export class TravelNotesController {
     description: "id에 부합하는 단건 조회",
   })
   @Get(":id")
-  async getOneTravelNote(
-    @Param("id", ParseIntPipe) id: number,
-    @SignInUser() user: UserEntity,
-  ) {
+  async getOneTravelNote(@Param("id", ParseIntPipe) id: number, @SignInUser() user: UserEntity) {
     return await this.travelNotesService.getOne(id);
   }
 
@@ -303,10 +293,7 @@ export class TravelNotesController {
     example: 1,
   })
   @Delete(":id")
-  async delete(
-    @SignInUser() user: UserEntity,
-    @Param("id", ParseIntPipe) id: number,
-  ) {
+  async delete(@SignInUser() user: UserEntity, @Param("id", ParseIntPipe) id: number) {
     return await this.travelNotesService.delete(user.id, id);
   }
 }

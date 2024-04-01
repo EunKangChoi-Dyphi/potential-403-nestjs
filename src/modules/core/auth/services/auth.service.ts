@@ -1,10 +1,5 @@
 import { HttpService } from "@nestjs/axios";
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { firstValueFrom } from "rxjs";
 import TrazzleJwtPayload from "src/modules/core/auth/jwt/trazzle-jwt.payload";
@@ -15,10 +10,7 @@ import { OAuthSocialLoginType } from "../constants/oauth.constant";
 import jwt, { Jwt, JwtPayload } from "jsonwebtoken";
 import JwksRsa, { SigningKey } from "jwks-rsa";
 import { OAuth2Client, TokenInfo } from "google-auth-library";
-import {
-  GOOGLE_OAUTH_CLIENT_TOKEN,
-  JWK_CLIENT_TOKEN,
-} from "../constants/auth.constant";
+import { GOOGLE_OAUTH_CLIENT_TOKEN, JWK_CLIENT_TOKEN } from "../constants/auth.constant";
 import { SignInOrSignUpRequestBodyDto } from "src/modules/users/dtos/req/sign-in-sign-up-request-body.dto";
 import { PrismaService } from "../../database/prisma/prisma.service";
 import { SocialLoginResponseDto } from "src/modules/users/dtos/res/social-login-response.dto";
@@ -40,9 +32,7 @@ export class AuthService {
     private readonly redisService: RedisService,
     private readonly httpService: HttpService,
   ) {
-    this.JWT_ACCESS_TOKEN_EXPIRATION_TTL = +this.customConfigService.get(
-      ENV_KEY.JWT_ACCESS_TOKEN_EXPIRATION_TTL,
-    );
+    this.JWT_ACCESS_TOKEN_EXPIRATION_TTL = +this.customConfigService.get(ENV_KEY.JWT_ACCESS_TOKEN_EXPIRATION_TTL);
   }
   async signOut(userId: number) {
     try {
@@ -62,11 +52,7 @@ export class AuthService {
       const accessToken = await this.jwtService.signAsync(payload);
 
       // redis에 등록
-      await this.redisService.set(
-        `user-${userId}`,
-        accessToken,
-        this.JWT_ACCESS_TOKEN_EXPIRATION_TTL,
-      );
+      await this.redisService.set(`user-${userId}`, accessToken, this.JWT_ACCESS_TOKEN_EXPIRATION_TTL);
 
       return accessToken;
     } catch (e) {
@@ -138,8 +124,7 @@ export class AuthService {
     const { accessToken } = dto;
     try {
       // todo
-      const googleToken: TokenInfo =
-        await this.googleOAuthClient.getTokenInfo(accessToken);
+      const googleToken: TokenInfo = await this.googleOAuthClient.getTokenInfo(accessToken);
 
       const account = `${OAuthSocialLoginType.Google}-${googleToken.aud}`;
 
@@ -177,9 +162,7 @@ export class AuthService {
     }
   }
 
-  async signInApple(
-    dto: SignInOrSignUpRequestBodyDto,
-  ): Promise<SocialLoginResponseDto> {
+  async signInApple(dto: SignInOrSignUpRequestBodyDto): Promise<SocialLoginResponseDto> {
     const { accessToken } = dto;
     try {
       // jwt 토큰 디코드
@@ -192,9 +175,7 @@ export class AuthService {
       }
 
       // 공개키
-      const applePublicKey: SigningKey = await this.jwksClient.getSigningKey(
-        decodedJWT.header.kid,
-      );
+      const applePublicKey: SigningKey = await this.jwksClient.getSigningKey(decodedJWT.header.kid);
 
       const appleSignedKey: string = applePublicKey.getPublicKey();
 
@@ -202,10 +183,7 @@ export class AuthService {
         complete: true,
       });
 
-      if (
-        !payload.nonce_supported ||
-        payload.iss !== "https://appleid.apple.com"
-      ) {
+      if (!payload.nonce_supported || payload.iss !== "https://appleid.apple.com") {
         throw new UnauthorizedException("유효하지 않은 토큰입니다.");
       }
 

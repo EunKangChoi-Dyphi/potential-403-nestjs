@@ -9,10 +9,7 @@ export const joinSeparators = (separator: string, ...strings: string[]) => {
 /**
  * where문의 조건이 여러개일경우 사용되는 쿼리 유틸리티 함수
  */
-export const findWithWhereClauses = (
-  filters: Record<string, any>,
-  searchFields?: string[],
-) => {
+export const findWithWhereClauses = (filters: Record<string, any>, searchFields?: string[]) => {
   const whereClauses = {};
 
   for (const key in filters) {

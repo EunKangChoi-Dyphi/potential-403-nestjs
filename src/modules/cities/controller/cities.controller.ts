@@ -1,25 +1,9 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Put,
-  Query,
-  ParseIntPipe,
-} from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Query, ParseIntPipe } from "@nestjs/common";
 import { CitiesService } from "../service/cities.service";
 import { CreateCityDto } from "../dto/create-city.dto";
 import { UpdateCityDto } from "../dto/update-city.dto";
 import { SearchCityDto } from "../dto/search-city.dto";
-import {
-  ApiExcludeEndpoint,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiExcludeEndpoint, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CityEntity } from "../entities/city.entity";
 
 @ApiTags("City")
@@ -42,10 +26,7 @@ export class CitiesController {
 
   @ApiExcludeEndpoint()
   @Put(":id")
-  update(
-    @Param("id", ParseIntPipe) id: string,
-    @Body() updateCityDto: UpdateCityDto,
-  ) {
+  update(@Param("id", ParseIntPipe) id: string, @Body() updateCityDto: UpdateCityDto) {
     return this.citiesService.update(+id, updateCityDto);
   }
 

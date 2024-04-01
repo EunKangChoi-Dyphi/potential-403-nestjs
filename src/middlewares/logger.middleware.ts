@@ -16,9 +16,7 @@ export class LoggerMiddleware implements NestMiddleware {
       const contentLength = response.get("content-length");
       const endTime = new Date().getTime();
 
-      this.logger.log(
-        `${method} ${originalUrl} ${statusCode} ${contentLength} - ${userAgent} ${ip}`,
-      );
+      this.logger.log(`${method} ${originalUrl} ${statusCode} ${contentLength} - ${userAgent} ${ip}`);
       this.logger.log(`api-run-time: ${endTime - startTime} ms`);
     });
     next();

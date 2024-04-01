@@ -43,9 +43,7 @@ export class UsersService {
       // 2. 프로필 이미지 URL 셋팅
       const oldProfileImageS3URL = user.profileImageURL;
       const newProfileImageS3URL = profileImageFile
-        ? this.awsS3Service.publishS3URL(
-            `profiles/${id}/${profileImageFile.originalname}`,
-          )
+        ? this.awsS3Service.publishS3URL(`profiles/${id}/${profileImageFile.originalname}`)
         : oldProfileImageS3URL;
 
       // 3. 유저정보를 업데이트한다

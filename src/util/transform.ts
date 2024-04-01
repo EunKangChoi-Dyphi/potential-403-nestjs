@@ -7,9 +7,7 @@ export const toLocalDate = (message?: string) => {
     try {
       return LocalDate.parse(params.value);
     } catch (e) {
-      throw new BadRequestException(
-        message || "날짜 형식이 아닙니다. [YYYY-MM-DD]",
-      );
+      throw new BadRequestException(message || "날짜 형식이 아닙니다. [YYYY-MM-DD]");
     }
   };
 };

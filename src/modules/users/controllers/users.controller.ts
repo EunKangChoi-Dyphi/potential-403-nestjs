@@ -17,14 +17,7 @@ import { UserEntity } from "../entities/user.entity";
 import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { AuthService } from "src/modules/core/auth/services/auth.service";
 import { CustomConfigService } from "src/modules/core/config/custom-config.service";
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
   SignInOrSignUpAppleRequestBodyDto,

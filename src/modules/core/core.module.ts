@@ -8,21 +8,7 @@ import { NcpModule } from "./ncp/ncp.module";
 
 @Global()
 @Module({
-  imports: [
-    PrismaModule,
-    CustomConfigModule,
-    AuthModule,
-    RedisModule,
-    AwsS3Module,
-    NcpModule,
-  ],
-  exports: [
-    PrismaModule,
-    CustomConfigModule,
-    AuthModule,
-    RedisModule,
-    AwsS3Module,
-    NcpModule,
-  ],
+  imports: [PrismaModule, CustomConfigModule, AuthModule, RedisModule, AwsS3Module, NcpModule],
+  exports: [PrismaModule, CustomConfigModule, AuthModule, RedisModule, AwsS3Module, NcpModule],
 })
 export class CoreModule {}

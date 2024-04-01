@@ -53,8 +53,7 @@ async function bootstrap() {
   SwaggerModule.setup("api-docs", app, swaggerDocument);
 
   // Run server
-  const SERVER_PORT =
-    customConfigService.get<number>(ENV_KEY.SERVER_PORT) || 3000;
+  const SERVER_PORT = customConfigService.get<number>(ENV_KEY.SERVER_PORT) || 3000;
   await app.listen(SERVER_PORT);
 }
 bootstrap();
